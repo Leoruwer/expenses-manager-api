@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  enum :user_type, [
+  enum :role, [
     :user,
     :admin
   ]
