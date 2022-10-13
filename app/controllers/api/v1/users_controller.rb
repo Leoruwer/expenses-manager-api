@@ -1,4 +1,7 @@
 class Api::V1::UsersController < ApplicationController
+  before_action :authorize_request, except: :create
+  before_action :find_user, except: %i[create index]
+
   def index
     users = User.all
 
@@ -20,9 +23,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def show
-    user = User.find(params[:id])
-
-    render json: {message: 'User found with success', data: user}
+    render json: {message: 'User found with success', data: @user}
   end
 
   def update
@@ -56,6 +57,12 @@ class Api::V1::UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:users).permit(:name, :email, :password, :type)
+    params.require(:users).permit(:name, :email, :password, :password_confirmation, :type)
+  end
+
+  def find_user
+    @user = User.find_by_username!(params[:_username])
+    rescue ActiveRecord::RecordNotFound
+      render json: { errors: 'User not found' }, status: :not_found
   end
 end
