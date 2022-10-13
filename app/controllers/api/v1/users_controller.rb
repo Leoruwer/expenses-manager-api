@@ -42,11 +42,15 @@ class Api::V1::UsersController < ApplicationController
   def destroy
     user = User.find(params[:id])
 
-    ActiveRecord::Base.transaction do
-      user.destroy
-    end
+    if user.admin?
+      render json: {message: 'Cannot delete user admin'}, status: :bad_request
+    else
+      ActiveRecord::Base.transaction do
+        user.destroy
+      end
 
-    render json: {message: 'User deleted with success'}, status: :ok
+      render json: {message: 'User deleted with success'}, status: :ok
+    end
   end
 
   private
