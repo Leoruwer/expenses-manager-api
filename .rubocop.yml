@@ -1,0 +1,11 @@
+require: rubocop-rspec
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.1.2
+  Exclude:
+    - 'Gemfile'
+    - '**/config.ru'
+    - 'bin/*'
+    - 'db/schema.rb'
+    - 'db/migrate/*.rb'

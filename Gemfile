@@ -43,6 +43,8 @@ group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   gem 'pry', '~> 0.13.1'
   gem 'factory_bot_rails', '~> 6.2'
+  gem 'rubocop-rails', '~> 2.17', '>= 2.17.1'
+  gem 'rubocop-rspec', '~> 2.14', '>= 2.14.1'
 end
 
 group :development do
