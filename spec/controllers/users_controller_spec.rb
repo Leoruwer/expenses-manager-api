@@ -109,24 +109,9 @@ RSpec.describe UsersController, type: :request do
         get(users_path, headers: {'Authorization': jwt_token})
         json = JSON.parse(response.body)
 
-        result = [
-          {
-            'name' => current_user.name,
-            'username' => current_user.username,
-            'email' => current_user.email,
-            'role' => current_user.role
-          },
-          {
-            'name' => another_user.name,
-            'username' => another_user.username,
-            'email' => another_user.email,
-            'role' => another_user.role
-          }
-        ]
-
         expect(response).to have_http_status :ok
-        expect(json.first).to include(result.first)
-        expect(json.second).to include(result.second)
+        expect(json[0]['email']).to eq(current_user.email)
+        expect(json[1]['email']).to eq(another_user.email)
       end
     end
 
