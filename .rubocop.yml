@@ -9,3 +9,6 @@ AllCops:
     - 'bin/*'
     - 'db/schema.rb'
     - 'db/migrate/*.rb'
+
+Style/Documentation:
+  Enabled: false
