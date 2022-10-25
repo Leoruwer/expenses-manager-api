@@ -71,24 +71,6 @@ RSpec.describe UsersController, type: :request do
     end
   end
 
-  describe '#auth_login' do
-    let(:current_user) { create(:user) }
-
-    it 'logins user' do
-      params = {
-        email: current_user.email,
-        password: current_user.password
-      }
-
-      post(auth_login_path, params: params)
-
-      json = JSON.parse(response.body)
-
-      expect(json['username']).to eq(current_user.username)
-      expect(JsonWebToken.decode(json['token'])['user_id']).to eq(current_user.id)
-    end
-  end
-
   context 'when JWT Token is valid' do
     let!(:current_user) { create(:user) }
     let!(:another_user) { create(:user, name: 'Second user', username: 'SecondUser', email: 'second.user@mail.com') }
@@ -154,6 +136,7 @@ RSpec.describe UsersController, type: :request do
 
           expect(response).to have_http_status :ok
           expect(json['message']).to eq('User updated with success')
+          expect(current_user.reload.username).to eq(params.dig(:user, :username))
         end
       end
 
@@ -161,7 +144,8 @@ RSpec.describe UsersController, type: :request do
         it 'returns errors' do
           params = {
             user: {
-              email: 'second.user@mail.com'
+              email: 'second.user@mail.com',
+              username: 'SecondUser'
             }
           }
 
@@ -170,16 +154,31 @@ RSpec.describe UsersController, type: :request do
 
           expect(response).to have_http_status :unprocessable_entity
           expect(json['errors']).to include('Email has already been taken')
+          expect(json['errors']).to include('Username has already been taken')
         end
       end
     end
 
     describe '#destroy' do
-      it 'destroys the given user' do
-        delete(user_path(current_user.username), headers: {'Authorization': jwt_token})
+      context 'with existing user' do
+        it 'destroys the given user' do
+          delete(user_path(current_user.username), headers: {'Authorization': jwt_token})
+          json = JSON.parse(response.body)
 
-        expect(response).to have_http_status :ok
-        expect{ current_user.reload }.to raise_error(ActiveRecord::RecordNotFound)
+          expect(response).to have_http_status :ok
+          expect{ current_user.reload }.to raise_error(ActiveRecord::RecordNotFound)
+          expect(json['message']).to include('User deleted with success')
+        end
+      end
+
+      context 'with non existing user' do
+        it 'returns error' do
+          delete(user_path('invalid-user'), headers: {'Authorization': jwt_token})
+          json = JSON.parse(response.body)
+
+          expect(response).to have_http_status :not_found
+          expect(json['errors']).to include('User not found')
+        end
       end
     end
   end
