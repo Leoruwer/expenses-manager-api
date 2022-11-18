@@ -1,12 +1,14 @@
 class UsersController < ApplicationController
   def create
-    user = CreateUser.new(user_params).execute
+    user = User.new(user_params)
 
-    if user&.errors.present?
+    if user.save
+      user = SlugifyUser.new(user).execute
+
+      render json: user, status: :created
+    else
       render json: { errors: user.errors.full_messages },
              status: :unprocessable_entity
-    else
-      render json: user, status: :created
     end
   end
 
