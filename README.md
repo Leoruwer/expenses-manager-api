@@ -5,7 +5,6 @@
 ```
 {
   name: 'string'
-  username: 'string'
   email: 'string'
   password: 'string'
   password_confirmation: 'string'
@@ -28,4 +27,4 @@ headers: {
 }
 ```
 ### Get user
-###### GET: /users/{username}
+###### GET: /users/{slug}
