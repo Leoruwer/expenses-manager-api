@@ -4,226 +4,113 @@ require 'rails_helper'
 
 RSpec.describe UsersController, type: :request do
   describe '#create' do
+    subject { post(register_path, params: params) }
+
+    let(:name) { 'Foo Bar' }
+    let(:email) { 'foobar@mail.com' }
+    let(:password) { 'securepassword123' }
+    let(:role) { 'user' }
+    let(:params) do
+      {
+        name: name,
+        email: email,
+        password: password,
+        password_confirmation: password,
+        role: role
+      }
+    end
+
     context 'with valid params' do
       it 'create normal user' do
-        params = {
-          user: {
-            name: 'Foo Bar',
-            username: 'foobar',
-            email: 'foobar@mail.com',
-            password: 'securepassword123',
-            password_confirmation: 'securepassword123'
-          }
-        }
-
-        post(users_path, params: params)
+        subject
 
         json = JSON.parse(response.body)
 
         expect(response).to have_http_status :created
-        expect(json['name']).to eq(params[:user][:name])
-        expect(json['username']).to eq(params[:user][:username])
-        expect(json['email']).to eq(params[:user][:email])
+        expect(json['name']).to eq('Foo Bar')
+        expect(json['email']).to eq('foobar@mail.com')
         expect(json['role']).to eq('user')
       end
 
-      it 'create admin user' do
-        params = {
-          user: {
-            name: 'Foo Bar',
-            username: 'foobar',
-            email: 'foobar@mail.com',
-            password: 'securepassword123',
-            password_confirmation: 'securepassword123',
-            role: 'admin'
-          }
-        }
+      context 'when role is admin' do
+        let(:role) { 'admin' }
+        it 'creates a user' do
+          subject
 
-        post(users_path, params: params)
+          json = JSON.parse(response.body)
 
-        json = JSON.parse(response.body)
-
-        expect(response).to have_http_status :created
-        expect(json['name']).to eq(params[:user][:name])
-        expect(json['username']).to eq(params[:user][:username])
-        expect(json['email']).to eq(params[:user][:email])
-        expect(json['role']).to eq(params[:user][:role])
+          expect(response).to have_http_status :created
+          expect(json['name']).to eq('Foo Bar')
+          expect(json['email']).to eq('foobar@mail.com')
+          expect(json['role']).to eq('admin')
+        end
       end
     end
 
     context 'with invalid params' do
-      it 'returns errors' do
-        params = {
-          user: {
-            name: 'Foo bar'
-          }
-        }
+      context 'with blank email' do
+        let(:email) { nil }
 
-        post(users_path, params: params)
-        json = JSON.parse(response.body)
+        it 'returns error' do
+          subject
 
-        expect(response).to have_http_status :unprocessable_entity
-        expect(json['errors']).to include('Email can\'t be blank')
-        expect(json['errors']).to include('Username can\'t be blank')
-        expect(json['errors']).to include('Password can\'t be blank')
-        expect(json['errors']).to include('Password is too short (minimum is 6 characters)')
-      end
-    end
-  end
-
-  context 'when JWT Token is valid' do
-    let!(:current_user) { create(:user) }
-    let!(:another_user) { create(:user, name: 'Second user', username: 'SecondUser', email: 'second.user@mail.com') }
-
-    let(:jwt_token) do
-      request_params = {
-        email: current_user.email,
-        password: current_user.password
-      }
-
-      post(auth_login_path, params: request_params)
-
-      JSON.parse(response.body)['token']
-    end
-
-    describe '#index' do
-      it 'returns all users' do
-        get(users_path, headers: {'Authorization': jwt_token})
-        json = JSON.parse(response.body)
-
-        expect(response).to have_http_status :ok
-        expect(json[0]['email']).to eq(current_user.email)
-        expect(json[1]['email']).to eq(another_user.email)
-      end
-    end
-
-    describe '#show' do
-      context 'with valid params' do
-        it 'returns the given user' do
-          get(user_path(current_user.username), headers: {'Authorization': jwt_token})
-          json = JSON.parse(response.body)
-
-          expect(response).to have_http_status :ok
-          expect(json['name']).to eq(current_user.name)
-          expect(json['username']).to eq(current_user.username)
-          expect(json['email']).to eq(current_user.email)
-          expect(json['role']).to eq(current_user.role)
-        end
-      end
-
-      context 'with invalid params' do
-        it 'returns errors' do
-          get(user_path('invalid'), headers: {'Authorization': jwt_token})
-          json = JSON.parse(response.body)
-
-          expect(response).to have_http_status :not_found
-          expect(json).to eq({'errors' => 'User not found'})
-        end
-      end
-    end
-
-    describe '#update' do
-      context 'with valid params' do
-        it 'updates the given user' do
-          params = {
-            user: {
-              username: 'newUsername'
-            }
-          }
-
-          put(user_path(current_user.username), headers: {'Authorization': jwt_token}, params: params)
-          json = JSON.parse(response.body)
-
-          expect(response).to have_http_status :ok
-          expect(json['message']).to eq('User updated with success')
-          expect(current_user.reload.username).to eq(params.dig(:user, :username))
-        end
-      end
-
-      context 'with invalid params' do
-        it 'returns errors' do
-          params = {
-            user: {
-              email: 'second.user@mail.com',
-              username: 'SecondUser'
-            }
-          }
-
-          put(user_path(current_user.username), headers: {'Authorization': jwt_token}, params: params)
           json = JSON.parse(response.body)
 
           expect(response).to have_http_status :unprocessable_entity
-          expect(json['errors']).to include('Email has already been taken')
-          expect(json['errors']).to include('Username has already been taken')
-        end
-      end
-    end
-
-    describe '#destroy' do
-      context 'with existing user' do
-        it 'destroys the given user' do
-          delete(user_path(current_user.username), headers: {'Authorization': jwt_token})
-          json = JSON.parse(response.body)
-
-          expect(response).to have_http_status :ok
-          expect{ current_user.reload }.to raise_error(ActiveRecord::RecordNotFound)
-          expect(json['message']).to include('User deleted with success')
+          expect(json['errors']).to include('Email can\'t be blank')
         end
       end
 
-      context 'with non existing user' do
+      context 'with invalid email' do
+        let(:email) { 'invalidmail' }
+
         it 'returns error' do
-          delete(user_path('invalid-user'), headers: {'Authorization': jwt_token})
+          subject
+
           json = JSON.parse(response.body)
 
-          expect(response).to have_http_status :not_found
-          expect(json['errors']).to include('User not found')
+          expect(response).to have_http_status :unprocessable_entity
+          expect(json['errors']).to include('Email is invalid')
         end
       end
-    end
-  end
 
-  context 'when JWT Token is invalid' do
-    let(:current_user) { create(:user) }
-    let(:jwt_token) { 'invalid-token' }
+      context 'with blank name' do
+        let(:name) { nil }
 
-    describe '#index' do
-      it 'returns invalid JWT token' do
-        get(users_path, headers: {'Authorization': jwt_token})
+        it 'returns error' do
+          subject
 
-        expect(response).to have_http_status :unauthorized
-        expect(JSON.parse(response.body)).to include('message' => 'Invalid JWT token')
+          json = JSON.parse(response.body)
+
+          expect(response).to have_http_status :unprocessable_entity
+          expect(json['errors']).to include('Name can\'t be blank')
+        end
       end
-    end
 
-    describe '#show' do
-      it 'returns invalid JWT token' do
-        get(user_path(current_user.username), headers: {'Authorization': jwt_token})
+      context 'with blank password' do
+        let(:password) { nil }
 
-        expect(response).to have_http_status :unauthorized
-        expect(JSON.parse(response.body)).to include('message' => 'Invalid JWT token')
+        it 'returns error' do
+          subject
+
+          json = JSON.parse(response.body)
+
+          expect(response).to have_http_status :unprocessable_entity
+          expect(json['errors']).to include('Password can\'t be blank')
+        end
       end
-    end
 
-    describe '#update' do
-      it 'returns invalid JWT token' do
-        params = {
-          username: 'newUsername'
-        }
+      context 'with short password' do
+        let(:password) { '12345' }
 
-        put(user_path(current_user.username), headers: {'Authorization': jwt_token}, params: params)
+        it 'returns error' do
+          subject
 
-        expect(response).to have_http_status :unauthorized
-        expect(JSON.parse(response.body)).to include('message' => 'Invalid JWT token')
-      end
-    end
+          json = JSON.parse(response.body)
 
-    describe '#destroy' do
-      it 'returns invalid JWT token' do
-        delete(user_path(current_user.username), headers: {'Authorization': jwt_token})
-
-        expect(response).to have_http_status :unauthorized
-        expect(JSON.parse(response.body)).to include('message' => 'Invalid JWT token')
+          expect(response).to have_http_status :unprocessable_entity
+          expect(json['errors']).to include('Password is too short (minimum is 6 characters)')
+        end
       end
     end
   end
