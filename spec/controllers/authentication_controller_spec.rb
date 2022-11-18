@@ -17,7 +17,7 @@ RSpec.describe AuthenticationController, type: :request do
         json = JSON.parse(response.body)
 
         expect(response).to have_http_status :ok
-        expect(json['username']).to eq(current_user.username)
+        expect(json['email']).to eq(current_user.email)
         expect(JsonWebToken.decode(json['token'])['user_id']).to eq(current_user.id)
       end
     end
