@@ -23,7 +23,9 @@ class Admin::UsersController < ApplicationController
   end
 
   def update
-    unless @user.update(user_params)
+    if @user.update(user_params)
+      render json: { message: 'User updated with success' }, status: :ok
+    else
       render json: { errors: @user.errors.full_messages },
              status: :unprocessable_entity
     end
@@ -31,12 +33,14 @@ class Admin::UsersController < ApplicationController
 
   def destroy
     @user.destroy
+
+    render json: { message: 'User deleted with success' }, status: :ok
   end
 
   private
 
   def find_user
-    @user = User.find_by_email!(params[:email])
+    @user = User.find_by_slug!(params[:slug])
     rescue ActiveRecord::RecordNotFound
       render json: { errors: 'User not found' }, status: :not_found
   end
