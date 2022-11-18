@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  resources :users, param: :username
+  namespace :admin do
+    resources :users, param: :username
+  end
+
   post '/auth/login', to: 'authentication#login'
-  get '/*a', to: 'application#not_found'
+  post '/register', to: 'users#create'
 end
