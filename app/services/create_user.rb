@@ -6,8 +6,11 @@ class CreateUser
   end
 
   def execute
-    formatted_params = params.merge({ slug: "#{params[:name]&.parameterize}-#{params[:id]}" })
+    user = User.create!(params)
+    user.update(
+      slug: "#{user.name.parameterize}-#{user.id}"
+    )
 
-    User.create(formatted_params)
+    user
   end
 end
