@@ -3,9 +3,9 @@ class Admin::UsersController < ApplicationController
   before_action :find_user, except: %i[create index]
 
   def index
-    @users = User.all
+    users = User.all
 
-    render json: @users, status: :ok
+    render json: users, status: :ok
   end
 
   def show
@@ -13,11 +13,11 @@ class Admin::UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(user_params)
-    if @user.save
-      render json: @user, status: :created
+    new_user = User.new(user_params)
+    if new_user.save
+      render json: new_user, status: :created
     else
-      render json: { errors: @user.errors.full_messages },
+      render json: { errors: new_user.errors.full_messages },
              status: :unprocessable_entity
     end
   end
