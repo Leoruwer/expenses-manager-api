@@ -1,24 +1,31 @@
-# README
+# API Endpoints
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+### Create Users
+###### POST: /users
+```
+{
+  name: 'string'
+  username: 'string'
+  email: 'string'
+  password: 'string'
+  password_confirmation: 'string'
+}
+```
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+### Login
+###### POST: /auth/login
+```
+{
+  email: 'string'
+  password: 'string'
+}
+```
+### Get all Users
+###### GET: /users
+```
+headers: {
+  Authorization: 'jwt-token'
+}
+```
+### Get user
+###### GET: /users/{username}
