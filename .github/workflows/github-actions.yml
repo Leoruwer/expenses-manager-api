@@ -1,0 +1,66 @@
+name: GitHub Actions
+run-name: ${{ github.actor }} is running Tests and Rubocop 🚀
+on: [push]
+jobs:
+  # rubocop:
+  #   name: Rubocop
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Check out repository code
+  #       uses: actions/checkout@v3
+
+  #     - name: Setup Ruby
+  #       uses: ruby/setup-ruby@v1
+  #       with:
+  #         ruby-version: 3.1.2
+  #         bundler-cache: true
+
+  #     - name: Install bundler gems
+  #       run: bundle install
+
+  #     - name: Run rubocop
+  #       run: bundle exec rubocop
+
+  rspec:
+    name: RSpec
+    # needs: rubocop
+    runs-on: ubuntu-20.04
+    env:
+      RAILS_ENV: test
+      DB_PORT: 5432
+
+    services:
+      postgres:
+        image: postgres:12
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1.2
+          bundler-cache: true
+
+      - name: Install postgres client dependencies
+        run: sudo apt-get install libpq-dev
+
+      - name: Install bundler gems
+        run: bundle install
+
+      - name: Create database
+        run: bundle exec rails db:setup
+
+      - name: Run tests
+        run: bundle exec rspec
