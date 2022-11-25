@@ -18,6 +18,6 @@ class User < ApplicationRecord
   private
 
   def slugify_user
-    self.slug = "#{self.name}-#{rand(1000..9999)}"
+    self.slug = "#{self.name}-#{SecureRandom.hex(3)}".downcase.parameterize
   end
 end
