@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   namespace :admin do
-    resources :users, param: :username
+    resources :users, param: :slug
   end
 
   post '/auth/login', to: 'authentication#login'
