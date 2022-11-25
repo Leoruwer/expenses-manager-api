@@ -34,6 +34,7 @@ RSpec.describe UsersController, type: :request do
 
       context 'when role is admin' do
         let(:role) { 'admin' }
+
         it 'creates a user' do
           subject
 
@@ -57,7 +58,7 @@ RSpec.describe UsersController, type: :request do
           json = JSON.parse(response.body)
 
           expect(response).to have_http_status :unprocessable_entity
-          expect(json['errors']).to include('Email can\'t be blank')
+          expect(json['errors']).to include("Email can't be blank")
         end
       end
 
@@ -83,7 +84,7 @@ RSpec.describe UsersController, type: :request do
           json = JSON.parse(response.body)
 
           expect(response).to have_http_status :unprocessable_entity
-          expect(json['errors']).to include('Name can\'t be blank')
+          expect(json['errors']).to include("Name can't be blank")
         end
       end
 
@@ -96,7 +97,7 @@ RSpec.describe UsersController, type: :request do
           json = JSON.parse(response.body)
 
           expect(response).to have_http_status :unprocessable_entity
-          expect(json['errors']).to include('Password can\'t be blank')
+          expect(json['errors']).to include("Password can't be blank")
         end
       end
 
