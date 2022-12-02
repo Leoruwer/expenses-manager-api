@@ -12,3 +12,18 @@ AllCops:
 
 Style/Documentation:
   Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+Style/HashSyntax:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Max: 7
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/NamedSubject:
+  Enabled: false
