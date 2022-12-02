@@ -22,7 +22,7 @@ class AccountsController < ApplicationController
       render json: { message: 'Account created with success' }, status: :created
     else
       render json: { errors: new_account.errors.full_messages },
-              status: :unprocessable_entity
+             status: :unprocessable_entity
     end
   end
 
@@ -31,7 +31,7 @@ class AccountsController < ApplicationController
       render json: { message: 'Account updated with success' }, status: :ok
     else
       render json: { errors: @account.errors.full_messages },
-              status: :unprocessable_entity
+             status: :unprocessable_entity
     end
   end
 
