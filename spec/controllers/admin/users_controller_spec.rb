@@ -19,7 +19,7 @@ RSpec.describe Admin::UsersController, type: :request do
     end
 
     describe '#index' do
-      subject { get(admin_users_path, headers: {'Authorization': jwt_token}) }
+      subject { get(admin_users_path, headers: { Authorization: jwt_token }) }
 
       it 'returns all users' do
         subject
@@ -44,8 +44,9 @@ RSpec.describe Admin::UsersController, type: :request do
     end
 
     describe '#show' do
+      subject { get(admin_user_path(params), headers: { Authorization: jwt_token }) }
+
       let(:params) { current_user.slug }
-      subject { get(admin_user_path(params), headers: {'Authorization': jwt_token}) }
 
       context 'with valid params' do
         it 'returns the given user' do
@@ -69,7 +70,7 @@ RSpec.describe Admin::UsersController, type: :request do
           json = JSON.parse(response.body)
 
           expect(response).to have_http_status :not_found
-          expect(json).to eq({'errors' => 'User not found'})
+          expect(json).to eq({ 'errors' => 'User not found' })
         end
       end
 
@@ -86,7 +87,7 @@ RSpec.describe Admin::UsersController, type: :request do
     end
 
     describe '#update' do
-      subject { put(admin_user_path(current_user.slug), headers: {'Authorization': jwt_token}, params: params) }
+      subject { put(admin_user_path(current_user.slug), headers: { Authorization: jwt_token }, params: params) }
 
       let(:email) { 'new-foobar@mail.com' }
       let(:params) do
@@ -133,7 +134,7 @@ RSpec.describe Admin::UsersController, type: :request do
     end
 
     describe '#destroy' do
-      subject { delete(admin_user_path(params), headers: {'Authorization': jwt_token}) }
+      subject { delete(admin_user_path(params), headers: { Authorization: jwt_token }) }
 
       context 'with existing user' do
         let(:params) { current_user.slug }
@@ -144,7 +145,7 @@ RSpec.describe Admin::UsersController, type: :request do
           json = JSON.parse(response.body)
 
           expect(response).to have_http_status :ok
-          expect{ current_user.reload }.to raise_error(ActiveRecord::RecordNotFound)
+          expect { current_user.reload }.to raise_error(ActiveRecord::RecordNotFound)
           expect(json['message']).to include('User deleted with success')
         end
       end
