@@ -2,28 +2,28 @@ name: GitHub Actions
 run-name: ${{ github.actor }} is running Tests and Rubocop 🚀
 on: [push]
 jobs:
-  # rubocop:
-  #   name: Rubocop
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Check out repository code
-  #       uses: actions/checkout@v3
+  rubocop:
+    name: Rubocop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
 
-  #     - name: Setup Ruby
-  #       uses: ruby/setup-ruby@v1
-  #       with:
-  #         ruby-version: 3.1.2
-  #         bundler-cache: true
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1.2
+          bundler-cache: true
 
-  #     - name: Install bundler gems
-  #       run: bundle install
+      - name: Install bundler gems
+        run: bundle install
 
-  #     - name: Run rubocop
-  #       run: bundle exec rubocop
+      - name: Run rubocop
+        run: bundle exec rubocop
 
   rspec:
     name: RSpec
-    # needs: rubocop
+    needs: rubocop
     runs-on: ubuntu-20.04
     env:
       RAILS_ENV: test

@@ -38,5 +38,4 @@ RSpec.describe AuthenticationController, type: :request do
       end
     end
   end
-
 end

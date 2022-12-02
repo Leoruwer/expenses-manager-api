@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   after_initialize :slugify_user
 
@@ -10,14 +12,14 @@ class User < ApplicationRecord
             length: { minimum: 6 },
             if: -> { new_record? || !password.nil? }
 
-  enum :role, [
-    :user,
-    :admin
+  enum :role, %i[
+    user
+    admin
   ]
 
   private
 
   def slugify_user
-    self.slug = "#{self.name}-#{SecureRandom.hex(3)}".downcase.parameterize
+    self.slug = "#{name}-#{SecureRandom.hex(3)}".downcase.parameterize
   end
 end
