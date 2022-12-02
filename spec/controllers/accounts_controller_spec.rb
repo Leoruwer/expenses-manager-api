@@ -8,7 +8,9 @@ RSpec.describe AccountsController, type: :request do
     let!(:another_user) { create(:user, name: 'Second user', slug: 'second-user-1', email: 'second.user@mail.com') }
 
     let!(:current_account) { create(:account, user_id: current_user.id) }
-    let!(:second_account) { create(:account, name: 'Second account', slug: 'second-account-2', user_id: another_user.id) }
+    let(:second_account) do
+      create(:account, name: 'Second account', slug: 'second-account-2', user_id: another_user.id)
+    end
 
     let(:jwt_token) do
       request_params = {
