@@ -3,7 +3,7 @@
 module Admin
   class UsersController < ApplicationController
     before_action :authorize_request
-    before_action :find_user, except: %i[create index]
+    before_action :find_user, except: %i[index]
 
     def index
       users = User.all
@@ -13,17 +13,6 @@ module Admin
 
     def show
       render json: @user, status: :ok
-    end
-
-    def create
-      new_user = User.new(user_params)
-
-      if new_user.save
-        render json: new_user, status: :created
-      else
-        render json: { errors: new_user.errors.full_messages },
-               status: :unprocessable_entity
-      end
     end
 
     def update
