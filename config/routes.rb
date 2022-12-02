@@ -5,6 +5,8 @@ Rails.application.routes.draw do
     resources :users, param: :slug
   end
 
+  resources :categories, param: :slug
+
   post '/auth/login', to: 'authentication#login'
   post '/register', to: 'users#create'
 end
