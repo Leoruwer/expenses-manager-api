@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Admin::UsersController, type: :request do
-  context 'when JWT Token is valid' do
+  describe '#users_controller' do
     let!(:current_user) { create(:user) }
     let!(:another_user) { create(:user, name: 'Second user', slug: 'second-user-1', email: 'second.user@mail.com') }
 
@@ -136,18 +136,16 @@ RSpec.describe Admin::UsersController, type: :request do
     describe '#destroy' do
       subject { delete(admin_user_path(params), headers: { Authorization: jwt_token }) }
 
-      context 'with existing user' do
-        let(:params) { current_user.slug }
+      let(:params) { current_user.slug }
 
-        it 'destroys the given user' do
-          subject
+      it 'destroys the given user' do
+        subject
 
-          json = JSON.parse(response.body)
+        json = JSON.parse(response.body)
 
-          expect(response).to have_http_status :ok
-          expect { current_user.reload }.to raise_error(ActiveRecord::RecordNotFound)
-          expect(json['message']).to include('User deleted with success')
-        end
+        expect(response).to have_http_status :ok
+        expect { current_user.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect(json['message']).to include('User deleted with success')
       end
 
       context 'with non existing user' do
@@ -161,16 +159,16 @@ RSpec.describe Admin::UsersController, type: :request do
           expect(response).to have_http_status :not_found
           expect(json['errors']).to include('User not found')
         end
+      end
 
-        context 'when JWT Token is invalid' do
-          let(:jwt_token) { 'invalid-token' }
+      context 'when JWT Token is invalid' do
+        let(:jwt_token) { 'invalid-token' }
 
-          it 'returns invalid JWT token' do
-            subject
+        it 'returns invalid JWT token' do
+          subject
 
-            expect(response).to have_http_status :unauthorized
-            expect(JSON.parse(response.body)).to include('message' => 'Invalid JWT token')
-          end
+          expect(response).to have_http_status :unauthorized
+          expect(JSON.parse(response.body)).to include('message' => 'Invalid JWT token')
         end
       end
     end
