@@ -6,6 +6,8 @@ class Account < ApplicationRecord
   validates :name, presence: true
   validates :slug, uniqueness: true
 
+  belongs_to :user
+
   private
 
   def slugify_user

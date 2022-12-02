@@ -17,6 +17,8 @@ class User < ApplicationRecord
     admin
   ]
 
+  has_many :accounts, dependent: :destroy
+
   private
 
   def slugify_user
