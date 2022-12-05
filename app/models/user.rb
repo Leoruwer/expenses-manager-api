@@ -21,6 +21,8 @@ class User < ApplicationRecord
 
   private
 
+  has_many :years, dependent: :destroy
+
   def slugify_user
     self.slug = "#{name}-#{SecureRandom.hex(3)}".downcase.parameterize
   end

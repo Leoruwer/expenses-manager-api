@@ -36,4 +36,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_05_125856) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  create_table "years", force: :cascade do |t|
+    t.string "name"
+    t.string "slug"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_years_on_user_id"
+  end
+
 end
