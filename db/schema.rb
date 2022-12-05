@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_18_190047) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_05_125856) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "default_bills", force: :cascade do |t|
+    t.string "name"
+    t.string "slug"
+    t.integer "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_default_bills_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
