@@ -114,8 +114,8 @@ RSpec.describe AccountsController, type: :request do
       let(:user_id) { current_user.id }
       let(:params) do
         {
-          user_id: user_id,
-          name: name
+          name: name,
+          user_id: user_id
         }
       end
 
@@ -126,6 +126,18 @@ RSpec.describe AccountsController, type: :request do
 
         expect(response).to have_http_status :created
         expect(json).to include('message' => 'Account created with success')
+      end
+
+      context 'without name' do
+        let(:name) { nil }
+
+        it "returns name can't be blank error" do
+          subject
+
+          json = JSON.parse(response.body)
+
+          expect(json).to include('errors' => ["Name can't be blank"])
+        end
       end
 
       context 'with invalid user' do
