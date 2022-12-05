@@ -18,6 +18,7 @@ class User < ApplicationRecord
   ]
 
   has_many :default_bills, dependent: :destroy
+  has_many :months, dependent: :destroy
 
   private
 
