@@ -8,7 +8,8 @@ class ApplicationController < ActionController::API
   def authorize_request
     current_user.present?
   rescue ActiveRecord::RecordNotFound, JWT::DecodeError => e
-    render json: { message: "Unauthorized" }, status: :unauthorized
+    Rails.logger.warn("Unauthorized user trying to log in: #{e.message}")
+    render json: { message: 'Unauthorized' }, status: :unauthorized
   end
 
   def current_user
