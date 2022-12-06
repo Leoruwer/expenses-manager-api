@@ -5,7 +5,7 @@ class DefaultBillsController < ApplicationController
   before_action :find_default_bill, except: %i[index create]
 
   def index
-    render json: @current_user.default_bills, status: :ok
+    render json: current_user.default_bills, status: :ok
   end
 
   def show
@@ -13,7 +13,7 @@ class DefaultBillsController < ApplicationController
   end
 
   def create
-    new_default_bill = @current_user.default_bills.new(default_bill_params)
+    new_default_bill = current_user.default_bills.new(default_bill_params)
 
     if new_default_bill.save
       render json: { message: 'Default Bill created with success' }, status: :created
@@ -41,7 +41,7 @@ class DefaultBillsController < ApplicationController
   private
 
   def find_default_bill
-    @default_bill ||= @current_user.default_bills.find_by!(slug: params[:slug])
+    @default_bill ||= current_user.default_bills.find_by!(slug: params[:slug])
   rescue ActiveRecord::RecordNotFound
     render json: { errors: 'Default Bill not found' }, status: :not_found
   end

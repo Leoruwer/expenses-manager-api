@@ -39,13 +39,13 @@ RSpec.describe DefaultBillsController, type: :request do
     context 'when JWT Token is invalid' do
       let(:jwt_token) { 'invalid-token' }
 
-      it 'returns invalid JWT token' do
+      it 'returns Unauthorized' do
         subject
 
         json = JSON.parse(response.body)
 
         expect(response).to have_http_status :unauthorized
-        expect(json).to include({ 'message' => 'Invalid JWT token' })
+        expect(json).to include({ 'message' => 'Unauthorized' })
       end
     end
   end
@@ -83,13 +83,13 @@ RSpec.describe DefaultBillsController, type: :request do
     context 'when JWT Token is invalid' do
       let(:jwt_token) { 'invalid-token' }
 
-      it 'returns invalid JWT token' do
+      it 'returns Unauthorized' do
         subject
 
         json = JSON.parse(response.body)
 
         expect(response).to have_http_status :unauthorized
-        expect(json).to include('message' => 'Invalid JWT token')
+        expect(json).to include('message' => 'Unauthorized')
       end
     end
   end
@@ -152,11 +152,11 @@ RSpec.describe DefaultBillsController, type: :request do
     context 'when JWT Token is invalid' do
       let(:jwt_token) { 'invalid-token' }
 
-      it 'returns invalid JWT token' do
+      it 'returns Unauthorized' do
         subject
 
         expect(response).to have_http_status :unauthorized
-        expect(JSON.parse(response.body)).to include('message' => 'Invalid JWT token')
+        expect(JSON.parse(response.body)).to include('message' => 'Unauthorized')
       end
     end
   end
@@ -192,11 +192,11 @@ RSpec.describe DefaultBillsController, type: :request do
     context 'when JWT Token is invalid' do
       let(:jwt_token) { 'invalid-token' }
 
-      it 'returns invalid JWT token' do
+      it 'returns Unauthorized' do
         subject
 
         expect(response).to have_http_status :unauthorized
-        expect(JSON.parse(response.body)).to include('message' => 'Invalid JWT token')
+        expect(JSON.parse(response.body)).to include('message' => 'Unauthorized')
       end
     end
   end

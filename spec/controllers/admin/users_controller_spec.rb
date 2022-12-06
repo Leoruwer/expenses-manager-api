@@ -34,11 +34,11 @@ RSpec.describe Admin::UsersController, type: :request do
       context 'when JWT Token is invalid' do
         let(:jwt_token) { 'invalid-token' }
 
-        it 'returns invalid JWT token' do
+        it 'returns Unauthorized' do
           subject
 
           expect(response).to have_http_status :unauthorized
-          expect(JSON.parse(response.body)).to include('message' => 'Invalid JWT token')
+          expect(JSON.parse(response.body)).to include('message' => 'Unauthorized')
         end
       end
     end
@@ -77,11 +77,11 @@ RSpec.describe Admin::UsersController, type: :request do
       context 'when JWT Token is invalid' do
         let(:jwt_token) { 'invalid-token' }
 
-        it 'returns invalid JWT token' do
+        it 'returns Unauthorized' do
           subject
 
           expect(response).to have_http_status :unauthorized
-          expect(JSON.parse(response.body)).to include('message' => 'Invalid JWT token')
+          expect(JSON.parse(response.body)).to include('message' => 'Unauthorized')
         end
       end
     end
@@ -124,11 +124,11 @@ RSpec.describe Admin::UsersController, type: :request do
       context 'when JWT Token is invalid' do
         let(:jwt_token) { 'invalid-token' }
 
-        it 'returns invalid JWT token' do
+        it 'returns Unauthorized' do
           subject
 
           expect(response).to have_http_status :unauthorized
-          expect(JSON.parse(response.body)).to include('message' => 'Invalid JWT token')
+          expect(JSON.parse(response.body)).to include('message' => 'Unauthorized')
         end
       end
     end
@@ -165,11 +165,11 @@ RSpec.describe Admin::UsersController, type: :request do
         context 'when JWT Token is invalid' do
           let(:jwt_token) { 'invalid-token' }
 
-          it 'returns invalid JWT token' do
+          it 'returns Unauthorized' do
             subject
 
             expect(response).to have_http_status :unauthorized
-            expect(JSON.parse(response.body)).to include('message' => 'Invalid JWT token')
+            expect(JSON.parse(response.body)).to include('message' => 'Unauthorized')
           end
         end
       end
