@@ -2,13 +2,10 @@
 
 class DefaultBillsController < ApplicationController
   before_action :authorize_request
-  before_action :find_user, except: %i[show destroy]
   before_action :find_default_bill, except: %i[index create]
 
   def index
-    default_bills = DefaultBill.where(user_id: @user.id).all
-
-    render json: default_bills, status: :ok
+    render json: @current_user.default_bills, status: :ok
   end
 
   def show
@@ -16,7 +13,7 @@ class DefaultBillsController < ApplicationController
   end
 
   def create
-    new_default_bill = DefaultBill.new(default_bill_params)
+    new_default_bill = @current_user.default_bills.new(default_bill_params)
 
     if new_default_bill.save
       render json: { message: 'Default Bill created with success' }, status: :created
@@ -43,14 +40,8 @@ class DefaultBillsController < ApplicationController
 
   private
 
-  def find_user
-    @user = User.find(params[:user_id])
-  rescue ActiveRecord::RecordNotFound
-    render json: { errors: 'User not found' }, status: :not_found
-  end
-
   def find_default_bill
-    @default_bill = DefaultBill.find_by!(slug: params[:slug])
+    @default_bill ||= @current_user.default_bills.find_by!(slug: params[:slug])
   rescue ActiveRecord::RecordNotFound
     render json: { errors: 'Default Bill not found' }, status: :not_found
   end

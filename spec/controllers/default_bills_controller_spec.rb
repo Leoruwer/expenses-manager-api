@@ -24,9 +24,7 @@ RSpec.describe DefaultBillsController, type: :request do
     end
 
     describe '#index' do
-      subject { get(default_bills_path, headers: { Authorization: jwt_token }, params: { user_id: user_id }) }
-
-      let(:user_id) { current_user.id }
+      subject { get(default_bills_path, headers: { Authorization: jwt_token }) }
 
       it 'returns all default bills from current user' do
         subject
@@ -49,18 +47,6 @@ RSpec.describe DefaultBillsController, type: :request do
 
           expect(response).to have_http_status :unauthorized
           expect(json).to include({ 'message' => 'Invalid JWT token' })
-        end
-      end
-
-      context 'with invalid user' do
-        let(:user_id) { nil }
-
-        it 'returns no user found' do
-          subject
-
-          json = JSON.parse(response.body)
-
-          expect(json).to include('errors' => 'User not found')
         end
       end
     end
@@ -112,13 +98,11 @@ RSpec.describe DefaultBillsController, type: :request do
     describe '#create' do
       subject { post(default_bills_path, headers: { Authorization: jwt_token }, params: params) }
 
-      let(:user_id) { current_user.id }
       let(:name) { 'New default bill name' }
       let(:params) do
         {
           name: name,
-          value: 150,
-          user_id: user_id
+          value: 150
         }
       end
 
@@ -142,18 +126,6 @@ RSpec.describe DefaultBillsController, type: :request do
           expect(json).to include('errors' => ["Name can't be blank"])
         end
       end
-
-      context 'with invalid user' do
-        let(:user_id) { nil }
-
-        it 'returns no user found' do
-          subject
-
-          json = JSON.parse(response.body)
-
-          expect(json).to include('errors' => 'User not found')
-        end
-      end
     end
 
     describe '#update' do
@@ -162,10 +134,8 @@ RSpec.describe DefaultBillsController, type: :request do
       end
 
       let(:name) { 'New default bill name' }
-      let(:user_id) { current_user.id }
       let(:params) do
         {
-          user_id: user_id,
           name: name
         }
       end
@@ -188,18 +158,6 @@ RSpec.describe DefaultBillsController, type: :request do
 
           expect(response).to have_http_status :unauthorized
           expect(JSON.parse(response.body)).to include('message' => 'Invalid JWT token')
-        end
-      end
-
-      context 'with invalid user' do
-        let(:user_id) { nil }
-
-        it 'returns no user found' do
-          subject
-
-          json = JSON.parse(response.body)
-
-          expect(json).to include('errors' => 'User not found')
         end
       end
     end
