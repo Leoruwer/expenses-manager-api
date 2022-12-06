@@ -47,8 +47,6 @@ class DefaultBillsController < ApplicationController
   end
 
   def default_bill_params
-    params.permit(
-      :name, :value, :user_id
-    )
+    params.permit(:name, :value)
   end
 end
