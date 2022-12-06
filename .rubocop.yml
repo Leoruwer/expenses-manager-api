@@ -31,3 +31,6 @@ RSpec/NamedSubject:
 
 RSpec/MultipleMemoizedHelpers:
   Enabled: false
+
+RSpec/LetSetup:
+  Enabled: false

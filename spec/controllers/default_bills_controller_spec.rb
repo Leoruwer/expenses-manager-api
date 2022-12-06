@@ -7,7 +7,7 @@ RSpec.describe DefaultBillsController, type: :request do
   let!(:another_user) { create(:user, name: 'Second user', slug: 'second-user-1', email: 'second.user@mail.com') }
 
   let!(:current_default_bill) { create(:default_bill, user_id: current_user.id) }
-  let(:second_default_bill) do
+  let!(:second_default_bill) do
     create(:default_bill, name: 'Second default bill', slug: 'second-default_bill-2', user_id: another_user.id)
   end
 
@@ -22,13 +22,13 @@ RSpec.describe DefaultBillsController, type: :request do
     JSON.parse(response.body)['token']
   end
 
+  let(:json) { JSON.parse(response.body) }
+
   describe '#index' do
     subject { get(default_bills_path, headers: { Authorization: jwt_token }) }
 
     it 'returns all default bills from current user' do
       subject
-
-      json = JSON.parse(response.body)
 
       expect(response).to have_http_status :ok
       expect(json.count).to eq(1)
@@ -41,8 +41,6 @@ RSpec.describe DefaultBillsController, type: :request do
 
       it 'returns Unauthorized' do
         subject
-
-        json = JSON.parse(response.body)
 
         expect(response).to have_http_status :unauthorized
         expect(json).to include({ 'message' => 'Unauthorized' })
@@ -59,8 +57,6 @@ RSpec.describe DefaultBillsController, type: :request do
       it 'returns the given default bill' do
         subject
 
-        json = JSON.parse(response.body)
-
         expect(response).to have_http_status :ok
         expect(json['name']).to eq('Default Bill')
         expect(json['value']).to eq(100)
@@ -73,8 +69,6 @@ RSpec.describe DefaultBillsController, type: :request do
       it 'returns errors' do
         subject
 
-        json = JSON.parse(response.body)
-
         expect(response).to have_http_status :not_found
         expect(json).to include('errors' => 'Default Bill not found')
       end
@@ -85,8 +79,6 @@ RSpec.describe DefaultBillsController, type: :request do
 
       it 'returns Unauthorized' do
         subject
-
-        json = JSON.parse(response.body)
 
         expect(response).to have_http_status :unauthorized
         expect(json).to include('message' => 'Unauthorized')
@@ -108,8 +100,6 @@ RSpec.describe DefaultBillsController, type: :request do
     it 'creates a new default_bill' do
       subject
 
-      json = JSON.parse(response.body)
-
       expect(response).to have_http_status :created
       expect(json).to include('message' => 'Default Bill created with success')
     end
@@ -119,8 +109,6 @@ RSpec.describe DefaultBillsController, type: :request do
 
       it "returns name can't be blank error" do
         subject
-
-        json = JSON.parse(response.body)
 
         expect(json).to include('errors' => ["Name can't be blank"])
       end
@@ -141,8 +129,6 @@ RSpec.describe DefaultBillsController, type: :request do
 
     it 'updates the given default bill' do
       subject
-
-      json = JSON.parse(response.body)
 
       expect(response).to have_http_status :ok
       expect(json['message']).to eq('Default Bill updated with success')
@@ -169,8 +155,6 @@ RSpec.describe DefaultBillsController, type: :request do
     it 'destroys the given default bill' do
       subject
 
-      json = JSON.parse(response.body)
-
       expect(response).to have_http_status :ok
       expect { current_default_bill.reload }.to raise_error(ActiveRecord::RecordNotFound)
       expect(json['message']).to include('Default Bill deleted with success')
@@ -181,8 +165,6 @@ RSpec.describe DefaultBillsController, type: :request do
 
       it 'returns error' do
         subject
-
-        json = JSON.parse(response.body)
 
         expect(response).to have_http_status :not_found
         expect(json['errors']).to include('Default Bill not found')

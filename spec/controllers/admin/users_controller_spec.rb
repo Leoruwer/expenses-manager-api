@@ -18,13 +18,13 @@ RSpec.describe Admin::UsersController, type: :request do
       JSON.parse(response.body)['token']
     end
 
+    let(:json) { JSON.parse(response.body) }
+
     describe '#index' do
       subject { get(admin_users_path, headers: { Authorization: jwt_token }) }
 
       it 'returns all users' do
         subject
-
-        json = JSON.parse(response.body)
 
         expect(response).to have_http_status :ok
         expect(json[0]['email']).to eq(current_user.email)
@@ -52,8 +52,6 @@ RSpec.describe Admin::UsersController, type: :request do
         it 'returns the given user' do
           subject
 
-          json = JSON.parse(response.body)
-
           expect(response).to have_http_status :ok
           expect(json['name']).to eq(current_user.name)
           expect(json['email']).to eq(current_user.email)
@@ -66,8 +64,6 @@ RSpec.describe Admin::UsersController, type: :request do
 
         it 'returns errors' do
           subject
-
-          json = JSON.parse(response.body)
 
           expect(response).to have_http_status :not_found
           expect(json).to eq({ 'errors' => 'User not found' })
@@ -100,8 +96,6 @@ RSpec.describe Admin::UsersController, type: :request do
         it 'updates the given user' do
           subject
 
-          json = JSON.parse(response.body)
-
           expect(response).to have_http_status :ok
           expect(json['message']).to eq('User updated with success')
           expect(current_user.reload.email).to eq('new-foobar@mail.com')
@@ -113,8 +107,6 @@ RSpec.describe Admin::UsersController, type: :request do
 
         it 'returns errors' do
           subject
-
-          json = JSON.parse(response.body)
 
           expect(response).to have_http_status :unprocessable_entity
           expect(json['errors']).to include('Email has already been taken')
@@ -142,8 +134,6 @@ RSpec.describe Admin::UsersController, type: :request do
         it 'destroys the given user' do
           subject
 
-          json = JSON.parse(response.body)
-
           expect(response).to have_http_status :ok
           expect { current_user.reload }.to raise_error(ActiveRecord::RecordNotFound)
           expect(json['message']).to include('User deleted with success')
@@ -155,8 +145,6 @@ RSpec.describe Admin::UsersController, type: :request do
 
         it 'returns error' do
           subject
-
-          json = JSON.parse(response.body)
 
           expect(response).to have_http_status :not_found
           expect(json['errors']).to include('User not found')

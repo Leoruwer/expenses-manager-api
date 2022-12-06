@@ -44,7 +44,7 @@ class DefaultBillsController < ApplicationController
   private
 
   def default_bill
-    default_bill ||= current_user.default_bills.find_by(slug: params[:slug])
+    @default_bill ||= current_user.default_bills.find_by(slug: params[:slug])
   end
 
   def render_default_bill_not_found
