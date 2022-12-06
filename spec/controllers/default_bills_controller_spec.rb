@@ -51,9 +51,9 @@ RSpec.describe DefaultBillsController, type: :request do
   end
 
   describe '#show' do
-    subject { get(default_bill_path(default_bill_slug), headers: { Authorization: jwt_token }) }
+    subject { get(default_bill_path(params), headers: { Authorization: jwt_token }) }
 
-    let(:default_bill_slug) { current_default_bill.slug }
+    let(:params) { current_default_bill.slug }
 
     context 'with valid params' do
       it 'returns the given default bill' do
@@ -68,7 +68,7 @@ RSpec.describe DefaultBillsController, type: :request do
     end
 
     context 'with invalid params' do
-      let(:default_bill_slug) { 'invalid-slug' }
+      let(:params) { 'invalid-slug' }
 
       it 'returns errors' do
         subject
@@ -177,7 +177,7 @@ RSpec.describe DefaultBillsController, type: :request do
     end
 
     context 'with non existing default_bill' do
-      let(:params) { 'non-existing-default_bill' }
+      let(:params) { 'invalid-slug' }
 
       it 'returns error' do
         subject

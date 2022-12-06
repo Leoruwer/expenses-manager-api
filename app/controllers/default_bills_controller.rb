@@ -2,14 +2,15 @@
 
 class DefaultBillsController < ApplicationController
   before_action :authorize_request
-  before_action :find_default_bill, except: %i[index create]
 
   def index
     render json: current_user.default_bills, status: :ok
   end
 
   def show
-    render json: @default_bill, status: :ok
+    return render_default_bill_not_found if default_bill.blank?
+
+    render json: default_bill, status: :ok
   end
 
   def create
@@ -24,25 +25,29 @@ class DefaultBillsController < ApplicationController
   end
 
   def update
-    if @default_bill.update(default_bill_params)
+    if default_bill.update(default_bill_params)
       render json: { message: 'Default Bill updated with success' }, status: :ok
     else
-      render json: { errors: @default_bill.errors.full_messages },
+      render json: { errors: default_bill.errors.full_messages },
              status: :unprocessable_entity
     end
   end
 
   def destroy
-    @default_bill.destroy
+    return render_default_bill_not_found if default_bill.blank?
+
+    default_bill.destroy
 
     render json: { message: 'Default Bill deleted with success' }, status: :ok
   end
 
   private
 
-  def find_default_bill
-    @default_bill ||= current_user.default_bills.find_by!(slug: params[:slug])
-  rescue ActiveRecord::RecordNotFound
+  def default_bill
+    default_bill ||= current_user.default_bills.find_by(slug: params[:slug])
+  end
+
+  def render_default_bill_not_found
     render json: { errors: 'Default Bill not found' }, status: :not_found
   end
 
