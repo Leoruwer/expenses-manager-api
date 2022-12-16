@@ -25,6 +25,8 @@ class DefaultBillsController < ApplicationController
   end
 
   def update
+    return render_default_bill_not_found if default_bill.blank?
+
     if default_bill.update(default_bill_params)
       render json: { message: 'Default Bill updated with success' }, status: :ok
     else

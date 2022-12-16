@@ -49,9 +49,9 @@ RSpec.describe DefaultBillsController, type: :request do
   end
 
   describe '#show' do
-    subject { get(default_bill_path(params), headers: { Authorization: jwt_token }) }
+    subject { get(default_bill_path(slug), headers: { Authorization: jwt_token }) }
 
-    let(:params) { current_default_bill.slug }
+    let(:slug) { current_default_bill.slug }
 
     context 'with valid params' do
       it 'returns the given default bill' do
@@ -63,8 +63,19 @@ RSpec.describe DefaultBillsController, type: :request do
       end
     end
 
+    context 'with params for another user' do
+      let(:slug) { second_default_bill.slug }
+
+      it 'returns errors' do
+        subject
+
+        expect(response).to have_http_status :not_found
+        expect(json).to include('errors' => 'Default Bill not found')
+      end
+    end
+
     context 'with invalid params' do
-      let(:params) { 'invalid-slug' }
+      let(:slug) { 'invalid-slug' }
 
       it 'returns errors' do
         subject
@@ -117,8 +128,10 @@ RSpec.describe DefaultBillsController, type: :request do
 
   describe '#update' do
     subject do
-      put(default_bill_path(current_default_bill.slug), headers: { Authorization: jwt_token }, params: params)
+      put(default_bill_path(slug), headers: { Authorization: jwt_token }, params: params)
     end
+
+    let(:slug) { current_default_bill.slug }
 
     let(:name) { 'New default bill name' }
     let(:params) do
@@ -135,6 +148,27 @@ RSpec.describe DefaultBillsController, type: :request do
       expect(current_default_bill.reload.name).to eq('New default bill name')
     end
 
+    context 'with params for another user' do
+      let(:slug) { second_default_bill.slug }
+
+      it 'returns errors' do
+        subject
+
+        expect(response).to have_http_status :not_found
+        expect(json['errors']).to include('Default Bill not found')
+      end
+    end
+
+    context 'without name' do
+      let(:name) { nil }
+
+      it "returns name can't be blank error" do
+        subject
+
+        expect(json).to include('errors' => ["Name can't be blank"])
+      end
+    end
+
     context 'when JWT Token is invalid' do
       let(:jwt_token) { 'invalid-token' }
 
@@ -148,9 +182,9 @@ RSpec.describe DefaultBillsController, type: :request do
   end
 
   describe '#destroy' do
-    subject { delete(default_bill_path(params), headers: { Authorization: jwt_token }) }
+    subject { delete(default_bill_path(slug), headers: { Authorization: jwt_token }) }
 
-    let(:params) { current_default_bill.slug }
+    let(:slug) { current_default_bill.slug }
 
     it 'destroys the given default bill' do
       subject
@@ -160,8 +194,19 @@ RSpec.describe DefaultBillsController, type: :request do
       expect(json['message']).to include('Default Bill deleted with success')
     end
 
+    context 'with params for another user' do
+      let(:slug) { second_default_bill.slug }
+
+      it 'returns errors' do
+        subject
+
+        expect(response).to have_http_status :not_found
+        expect(json['errors']).to include('Default Bill not found')
+      end
+    end
+
     context 'with non existing default_bill' do
-      let(:params) { 'invalid-slug' }
+      let(:slug) { 'invalid-slug' }
 
       it 'returns error' do
         subject

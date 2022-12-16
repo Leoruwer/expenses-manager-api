@@ -14,4 +14,12 @@ RSpec.describe DefaultBill do
 
     expect(default_bill.slug).to match(/default-bill-.*/)
   end
+
+  describe 'model validations' do
+    it 'validates name presence' do
+      default_bill = described_class.new(name: nil, user: current_user)
+
+      expect(default_bill).not_to be_valid
+    end
+  end
 end
