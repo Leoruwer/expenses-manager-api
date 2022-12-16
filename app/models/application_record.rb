@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
 class ApplicationRecord < ActiveRecord::Base
-  after_initialize :slugify_name
-
   primary_abstract_class
 
   protected
 
-  def slugify_name
-    self.slug = "#{name}-#{SecureRandom.hex(3)}".downcase.parameterize if name.present?
+  def slugify(value)
+    self.slug = "#{value}-#{SecureRandom.hex(3)}".downcase.parameterize if value.present?
   end
 end
