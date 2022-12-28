@@ -33,7 +33,7 @@ RSpec.describe DefaultBillsController, type: :request do
       expect(response).to have_http_status :ok
       expect(json.count).to eq(1)
       expect(json[0]['name']).to eq('Default Bill')
-      expect(json[0]['value']).to eq(100)
+      expect(json[0]['value_in_cents']).to eq(100)
     end
 
     include_examples "Invalid JWT Token"
@@ -50,7 +50,7 @@ RSpec.describe DefaultBillsController, type: :request do
 
         expect(response).to have_http_status :ok
         expect(json['name']).to eq('Default Bill')
-        expect(json['value']).to eq(100)
+        expect(json['value_in_cents']).to eq(100)
       end
     end
 
@@ -86,7 +86,7 @@ RSpec.describe DefaultBillsController, type: :request do
     let(:params) do
       {
         name: name,
-        value: 150
+        value_in_cents: 150
       }
     end
 
