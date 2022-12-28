@@ -36,16 +36,7 @@ RSpec.describe DefaultBillsController, type: :request do
       expect(json[0]['value']).to eq(100)
     end
 
-    context 'when JWT Token is invalid' do
-      let(:jwt_token) { 'invalid-token' }
-
-      it 'returns Unauthorized' do
-        subject
-
-        expect(response).to have_http_status :unauthorized
-        expect(json).to include({ 'message' => 'Unauthorized' })
-      end
-    end
+    include_examples "Invalid JWT Token"
   end
 
   describe '#show' do
@@ -85,16 +76,7 @@ RSpec.describe DefaultBillsController, type: :request do
       end
     end
 
-    context 'when JWT Token is invalid' do
-      let(:jwt_token) { 'invalid-token' }
-
-      it 'returns Unauthorized' do
-        subject
-
-        expect(response).to have_http_status :unauthorized
-        expect(json).to include('message' => 'Unauthorized')
-      end
-    end
+    include_examples "Invalid JWT Token"
   end
 
   describe '#create' do
@@ -124,6 +106,8 @@ RSpec.describe DefaultBillsController, type: :request do
         expect(json).to include('errors' => ["Name can't be blank"])
       end
     end
+
+    include_examples "Invalid JWT Token"
   end
 
   describe '#update' do
@@ -169,16 +153,7 @@ RSpec.describe DefaultBillsController, type: :request do
       end
     end
 
-    context 'when JWT Token is invalid' do
-      let(:jwt_token) { 'invalid-token' }
-
-      it 'returns Unauthorized' do
-        subject
-
-        expect(response).to have_http_status :unauthorized
-        expect(JSON.parse(response.body)).to include('message' => 'Unauthorized')
-      end
-    end
+    include_examples "Invalid JWT Token"
   end
 
   describe '#destroy' do
@@ -216,15 +191,6 @@ RSpec.describe DefaultBillsController, type: :request do
       end
     end
 
-    context 'when JWT Token is invalid' do
-      let(:jwt_token) { 'invalid-token' }
-
-      it 'returns Unauthorized' do
-        subject
-
-        expect(response).to have_http_status :unauthorized
-        expect(JSON.parse(response.body)).to include('message' => 'Unauthorized')
-      end
-    end
+    include_examples "Invalid JWT Token"
   end
 end
