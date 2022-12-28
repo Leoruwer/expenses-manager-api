@@ -36,7 +36,7 @@ RSpec.describe DefaultBillsController, type: :request do
       expect(json[0]['value_in_cents']).to eq(100)
     end
 
-    include_examples "Invalid JWT Token"
+    include_examples 'Invalid JWT Token'
   end
 
   describe '#show' do
@@ -76,7 +76,7 @@ RSpec.describe DefaultBillsController, type: :request do
       end
     end
 
-    include_examples "Invalid JWT Token"
+    include_examples 'Invalid JWT Token'
   end
 
   describe '#create' do
@@ -107,7 +107,7 @@ RSpec.describe DefaultBillsController, type: :request do
       end
     end
 
-    include_examples "Invalid JWT Token"
+    include_examples 'Invalid JWT Token'
   end
 
   describe '#update' do
@@ -153,7 +153,7 @@ RSpec.describe DefaultBillsController, type: :request do
       end
     end
 
-    include_examples "Invalid JWT Token"
+    include_examples 'Invalid JWT Token'
   end
 
   describe '#destroy' do
@@ -191,6 +191,6 @@ RSpec.describe DefaultBillsController, type: :request do
       end
     end
 
-    include_examples "Invalid JWT Token"
+    include_examples 'Invalid JWT Token'
   end
 end

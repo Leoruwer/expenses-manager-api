@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.shared_examples "Invalid JWT Token" do
+RSpec.shared_examples 'Invalid JWT Token' do
   context 'when JWT Token is invalid' do
     let(:jwt_token) { 'invalid-token' }
 
