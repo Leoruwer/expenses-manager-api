@@ -3,7 +3,7 @@ class CreateDefaultBills < ActiveRecord::Migration[7.0]
     create_table :default_bills do |t|
       t.string :name, nil: false
       t.string :slug, nil: false
-      t.integer :value_in_cents, nil: true
+      t.monetize :value, nil: true
 
       t.timestamps
     end

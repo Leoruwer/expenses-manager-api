@@ -6,6 +6,8 @@ class DefaultBill < ApplicationRecord
   validates :name, presence: true
   validates :slug, uniqueness: true
 
+  monetize :value_in_cents
+
   belongs_to :user
 
   private
