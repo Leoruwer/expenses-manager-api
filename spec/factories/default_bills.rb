@@ -5,5 +5,7 @@ FactoryBot.define do
     name { 'Default Bill' }
     value_in_cents { 100 }
     slug { 'default_bill-1' }
+
+    association :user
   end
 end
