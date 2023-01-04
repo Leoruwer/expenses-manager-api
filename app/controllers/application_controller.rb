@@ -6,16 +6,21 @@ class ApplicationController < ActionController::API
   end
 
   def authorize_request
+    current_user.present?
+  rescue ActiveRecord::RecordNotFound, JWT::DecodeError => e
+    Rails.logger.warn("Unauthorized user trying to log in: #{e.message}")
+    render json: { message: 'Unauthorized' }, status: :unauthorized
+  end
+
+  def current_user
+    @current_user ||= User.find(decoded_token[:user_id])
+  end
+
+  private
+
+  def decoded_token
     header = request.headers['Authorization']
     header = header.split.last if header
-
-    begin
-      decoded = JsonWebToken.decode(header)
-      User.find(decoded[:user_id])
-    rescue ActiveRecord::RecordNotFound => e
-      render json: { errors: e.message }, status: :unauthorized
-    rescue JWT::DecodeError => e
-      render json: { message: 'Invalid JWT token', errors: e.message }, status: :unauthorized
-    end
+    JsonWebToken.decode(header)
   end
 end

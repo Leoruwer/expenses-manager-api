@@ -28,3 +28,9 @@ RSpec/MultipleExpectations:
 
 RSpec/NamedSubject:
   Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+RSpec/LetSetup:
+  Enabled: false

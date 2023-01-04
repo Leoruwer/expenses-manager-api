@@ -12,6 +12,7 @@ gem "pg", "~> 1.1"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
 gem 'rspec-rails', '~> 6.0', '>= 6.0.1'
+gem 'money-rails', '~>1.12'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
