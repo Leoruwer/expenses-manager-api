@@ -2,9 +2,11 @@
 
 FactoryBot.define do
   factory :default_bill do
-    name { 'Default Bill' }
-    value_in_cents { 100 }
-    slug { 'default_bill-1' }
+    bill_name = Faker::Game.unique.title
+
+    name { bill_name }
+    value_in_cents { rand(100..1000) }
+    slug { "#{bill_name}-#{SecureRandom.hex(3)}".downcase.parameterize }
 
     association :user
   end

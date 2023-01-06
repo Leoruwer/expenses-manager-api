@@ -4,12 +4,10 @@ require 'rails_helper'
 
 RSpec.describe DefaultBillsController, type: :request do
   let!(:current_user) { create(:user) }
-  let!(:another_user) { create(:user, name: 'Second user', slug: 'second-user-1', email: 'second.user@mail.com') }
+  let!(:another_user) { create(:user) }
 
-  let!(:current_default_bill) { create(:default_bill, user_id: current_user.id) }
-  let!(:second_default_bill) do
-    create(:default_bill, name: 'Second default bill', slug: 'second-default_bill-2', user_id: another_user.id)
-  end
+  let!(:current_default_bill) { create(:default_bill, name: 'Default Bill', value: 10, user_id: current_user.id) }
+  let!(:second_default_bill) { create(:default_bill, user_id: another_user.id) }
 
   let(:jwt_token) do
     request_params = {
@@ -33,7 +31,7 @@ RSpec.describe DefaultBillsController, type: :request do
       expect(response).to have_http_status :ok
       expect(json.count).to eq(1)
       expect(json[0]['name']).to eq('Default Bill')
-      expect(json[0]['value_in_cents']).to eq(100)
+      expect(json[0]['value_in_cents']).to eq(1000)
     end
 
     include_examples 'Invalid JWT Token'
@@ -50,7 +48,7 @@ RSpec.describe DefaultBillsController, type: :request do
 
         expect(response).to have_http_status :ok
         expect(json['name']).to eq('Default Bill')
-        expect(json['value_in_cents']).to eq(100)
+        expect(json['value_in_cents']).to eq(1000)
       end
     end
 
