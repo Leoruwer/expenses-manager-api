@@ -4,10 +4,9 @@ require 'rails_helper'
 
 RSpec.describe DefaultBillsController, type: :request do
   let!(:current_user) { create(:user) }
-  let!(:another_user) { create(:user) }
 
   let!(:current_default_bill) { create(:default_bill, name: 'Default Bill', value: 10, user_id: current_user.id) }
-  let!(:second_default_bill) { create(:default_bill, user_id: another_user.id) }
+  let!(:second_default_bill) { create(:default_bill) }
 
   let(:jwt_token) do
     request_params = {
