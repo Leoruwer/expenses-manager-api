@@ -15,7 +15,6 @@ class ApplicationController < ActionController::API
     render_error_message unless current_user.admin?
 
     Rails.logger.warn("User id='#{current_user.id}' is trying to access unauthorized area")
-
   rescue ActiveRecord::RecordNotFound, JWT::DecodeError => e
     render_error_message(e)
   end
