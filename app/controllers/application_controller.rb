@@ -5,17 +5,16 @@ class ApplicationController < ActionController::API
     render json: { error: 'not_found' }
   end
 
-  def authorize_request
+  def authorize_user
     current_user.present?
   rescue ActiveRecord::RecordNotFound, JWT::DecodeError => e
-    Rails.logger.warn("Unauthorized user trying to log in: #{e.message}")
-    render json: { message: 'Unauthorized' }, status: :unauthorized
+    render_error_message(e)
   end
 
-  def authorize_admin
-    return if current_user.role == 'admin'
-
-    render json: { message: 'Unauthorized' }, status: :unauthorized
+  def authorize_only_admin
+    render_error_message unless current_user.admin?
+  rescue ActiveRecord::RecordNotFound, JWT::DecodeError => e
+    render_error_message(e)
   end
 
   def current_user
@@ -28,5 +27,11 @@ class ApplicationController < ActionController::API
     header = request.headers['Authorization']
     header = header.split.last if header
     JsonWebToken.decode(header)
+  end
+
+  def render_error_message(e)
+    Rails.logger.warn("Unauthorized user trying to log in: #{e.message}")
+
+    render json: { message: 'Unauthorized' }, status: :unauthorized
   end
 end
