@@ -74,7 +74,7 @@ RSpec.describe Admin::UsersController, type: :request do
       end
     end
 
-    context 'with invalid params' do
+    context 'with an email that already exists' do
       let(:email) { 'second.user@mail.com' }
 
       it 'returns errors' do
@@ -82,6 +82,17 @@ RSpec.describe Admin::UsersController, type: :request do
 
         expect(response).to have_http_status :unprocessable_entity
         expect(json['errors']).to include('Email has already been taken')
+      end
+    end
+
+    context 'with invalid email' do
+      let(:email) { 'invalid.mail' }
+
+      it 'returns errors' do
+        subject
+
+        expect(response).to have_http_status :unprocessable_entity
+        expect(json['errors']).to include('Email is invalid')
       end
     end
 
