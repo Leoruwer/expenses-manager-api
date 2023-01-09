@@ -3,6 +3,7 @@
 module Admin
   class UsersController < ApplicationController
     before_action :authorize_request
+    before_action :authorize_admin
     before_action :find_user, except: %i[create index]
 
     def index
