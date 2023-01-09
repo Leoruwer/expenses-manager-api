@@ -11,17 +11,7 @@ RSpec.describe DefaultBillsController, type: :request do
     create(:default_bill, name: 'Second default bill', slug: 'second-default_bill-2', user_id: another_user.id)
   end
 
-  let(:jwt_token) do
-    request_params = {
-      email: current_user.email,
-      password: current_user.password
-    }
-
-    post(auth_login_path, params: request_params)
-
-    JSON.parse(response.body)['token']
-  end
-
+  let(:jwt_token) { JsonWebToken.encode(user_id: current_user.id) }
   let(:json) { JSON.parse(response.body) }
 
   describe '#index' do

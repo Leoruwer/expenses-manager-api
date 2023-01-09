@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class DefaultBillsController < ApplicationController
-  before_action :authorize_request
+  before_action :authorize_user
 
   def index
     render json: current_user.default_bills, status: :ok
