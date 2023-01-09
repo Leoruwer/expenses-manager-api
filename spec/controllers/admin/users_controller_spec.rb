@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Admin::UsersController, type: :request do
-  let!(:current_user) { create(:user) }
+  let!(:current_user) { create(:user, role: :admin) }
   let!(:another_user) { create(:user, name: 'Second user', slug: 'second-user-1', email: 'second.user@mail.com') }
 
   let(:jwt_token) { JsonWebToken.encode(user_id: current_user.id) }
@@ -22,6 +22,7 @@ RSpec.describe Admin::UsersController, type: :request do
     end
 
     include_examples 'Invalid JWT Token'
+    include_examples 'Unauthorize normal user'
   end
 
   describe '#show' do
@@ -52,6 +53,7 @@ RSpec.describe Admin::UsersController, type: :request do
     end
 
     include_examples 'Invalid JWT Token'
+    include_examples 'Unauthorize normal user'
   end
 
   describe '#update' do
@@ -97,6 +99,7 @@ RSpec.describe Admin::UsersController, type: :request do
     end
 
     include_examples 'Invalid JWT Token'
+    include_examples 'Unauthorize normal user'
   end
 
   describe '#destroy' do
@@ -125,6 +128,7 @@ RSpec.describe Admin::UsersController, type: :request do
       end
 
       include_examples 'Invalid JWT Token'
+    include_examples 'Unauthorize normal user'
     end
   end
 end

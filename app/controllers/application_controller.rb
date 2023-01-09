@@ -12,6 +12,12 @@ class ApplicationController < ActionController::API
     render json: { message: 'Unauthorized' }, status: :unauthorized
   end
 
+  def authorize_admin
+    return if current_user.role == 'admin'
+
+    render json: { message: 'Unauthorized' }, status: :unauthorized
+  end
+
   def current_user
     @current_user ||= User.find(decoded_token[:user_id])
   end
