@@ -128,7 +128,7 @@ RSpec.describe Admin::UsersController, type: :request do
       end
 
       include_examples 'Invalid JWT Token'
-    include_examples 'Unauthorize normal user'
+      include_examples 'Unauthorize normal user'
     end
   end
 end
