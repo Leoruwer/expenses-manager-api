@@ -5,7 +5,7 @@ FactoryBot.define do
     user_name = Faker::Name.unique.name
 
     name { user_name }
-    slug { "#{user_name}-#{SecureRandom.hex(3)}".downcase.parameterize }
+    slug { Faker::Internet.slug(words: "#{user_name} #{SecureRandom.hex(3)}") }
     email { Faker::Internet.email(name: user_name, separators: '.') }
     password { Faker::Internet.password }
   end
