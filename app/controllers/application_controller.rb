@@ -13,6 +13,9 @@ class ApplicationController < ActionController::API
 
   def authorize_only_admin
     render_error_message unless current_user.admin?
+
+    Rails.logger.warn("User id='#{current_user.id}' is trying to access unauthorized area")
+
   rescue ActiveRecord::RecordNotFound, JWT::DecodeError => e
     render_error_message(e)
   end
@@ -29,8 +32,8 @@ class ApplicationController < ActionController::API
     JsonWebToken.decode(header)
   end
 
-  def render_error_message(e)
-    Rails.logger.warn("Unauthorized user trying to log in: #{e.message}")
+  def render_error_message(error = nil)
+    Rails.logger.warn("Unauthorized user trying to log in: #{error.message}") if error.present?
 
     render json: { message: 'Unauthorized' }, status: :unauthorized
   end
