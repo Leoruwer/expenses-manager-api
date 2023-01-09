@@ -3,6 +3,8 @@
 
 MoneyRails.configure do |config|
   Money.locale_backend = nil
+  Money.rounding_mode = BigDecimal::ROUND_CEILING
+
   # To set the default currency
   #
   config.default_currency = :brl
