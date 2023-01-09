@@ -3,164 +3,126 @@
 require 'rails_helper'
 
 RSpec.describe Admin::UsersController, type: :request do
-  context 'when JWT Token is valid' do
-    let!(:current_user) { create(:user) }
-    let!(:another_user) { create(:user, name: 'Second user', slug: 'second-user-1', email: 'second.user@mail.com') }
+  let!(:current_user) { create(:user) }
+  let!(:another_user) { create(:user, name: 'Second user', slug: 'second-user-1', email: 'second.user@mail.com') }
 
-    let(:jwt_token) do
-      request_params = {
-        email: current_user.email,
-        password: current_user.password
-      }
+  let(:jwt_token) do
+    request_params = {
+      email: current_user.email,
+      password: current_user.password
+    }
 
-      post(auth_login_path, params: request_params)
+    post(auth_login_path, params: request_params)
 
-      JSON.parse(response.body)['token']
+    JSON.parse(response.body)['token']
+  end
+
+  let(:json) { JSON.parse(response.body) }
+
+  describe '#index' do
+    subject { get(admin_users_path, headers: { Authorization: jwt_token }) }
+
+    it 'returns all users' do
+      subject
+
+      expect(response).to have_http_status :ok
+      expect(json[0]['email']).to eq(current_user.email)
+      expect(json[1]['email']).to eq(another_user.email)
     end
 
-    let(:json) { JSON.parse(response.body) }
+    include_examples 'Invalid JWT Token'
+  end
 
-    describe '#index' do
-      subject { get(admin_users_path, headers: { Authorization: jwt_token }) }
+  describe '#show' do
+    subject { get(admin_user_path(params), headers: { Authorization: jwt_token }) }
 
-      it 'returns all users' do
+    let(:params) { current_user.slug }
+
+    context 'with valid params' do
+      it 'returns the given user' do
         subject
 
         expect(response).to have_http_status :ok
-        expect(json[0]['email']).to eq(current_user.email)
-        expect(json[1]['email']).to eq(another_user.email)
-      end
-
-      context 'when JWT Token is invalid' do
-        let(:jwt_token) { 'invalid-token' }
-
-        it 'returns Unauthorized' do
-          subject
-
-          expect(response).to have_http_status :unauthorized
-          expect(JSON.parse(response.body)).to include('message' => 'Unauthorized')
-        end
+        expect(json['name']).to eq(current_user.name)
+        expect(json['email']).to eq(current_user.email)
+        expect(json['role']).to eq(current_user.role)
       end
     end
 
-    describe '#show' do
-      subject { get(admin_user_path(params), headers: { Authorization: jwt_token }) }
+    context 'with invalid params' do
+      let(:params) { 'invalid-slug' }
 
+      it 'returns errors' do
+        subject
+
+        expect(response).to have_http_status :not_found
+        expect(json).to eq({ 'errors' => 'User not found' })
+      end
+    end
+
+    include_examples 'Invalid JWT Token'
+  end
+
+  describe '#update' do
+    subject { put(admin_user_path(current_user.slug), headers: { Authorization: jwt_token }, params: params) }
+
+    let(:email) { 'new-foobar@mail.com' }
+    let(:params) do
+      {
+        email: email
+      }
+    end
+
+    context 'with valid params' do
+      it 'updates the given user' do
+        subject
+
+        expect(response).to have_http_status :ok
+        expect(json['message']).to eq('User updated with success')
+        expect(current_user.reload.email).to eq('new-foobar@mail.com')
+      end
+    end
+
+    context 'with invalid params' do
+      let(:email) { 'second.user@mail.com' }
+
+      it 'returns errors' do
+        subject
+
+        expect(response).to have_http_status :unprocessable_entity
+        expect(json['errors']).to include('Email has already been taken')
+      end
+    end
+
+    include_examples 'Invalid JWT Token'
+  end
+
+  describe '#destroy' do
+    subject { delete(admin_user_path(params), headers: { Authorization: jwt_token }) }
+
+    context 'with existing user' do
       let(:params) { current_user.slug }
 
-      context 'with valid params' do
-        it 'returns the given user' do
-          subject
+      it 'destroys the given user' do
+        subject
 
-          expect(response).to have_http_status :ok
-          expect(json['name']).to eq(current_user.name)
-          expect(json['email']).to eq(current_user.email)
-          expect(json['role']).to eq(current_user.role)
-        end
-      end
-
-      context 'with invalid params' do
-        let(:params) { 'invalid-slug' }
-
-        it 'returns errors' do
-          subject
-
-          expect(response).to have_http_status :not_found
-          expect(json).to eq({ 'errors' => 'User not found' })
-        end
-      end
-
-      context 'when JWT Token is invalid' do
-        let(:jwt_token) { 'invalid-token' }
-
-        it 'returns Unauthorized' do
-          subject
-
-          expect(response).to have_http_status :unauthorized
-          expect(JSON.parse(response.body)).to include('message' => 'Unauthorized')
-        end
+        expect(response).to have_http_status :ok
+        expect { current_user.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect(json['message']).to include('User deleted with success')
       end
     end
 
-    describe '#update' do
-      subject { put(admin_user_path(current_user.slug), headers: { Authorization: jwt_token }, params: params) }
+    context 'with non existing user' do
+      let(:params) { 'non-existing-user' }
 
-      let(:email) { 'new-foobar@mail.com' }
-      let(:params) do
-        {
-          email: email
-        }
+      it 'returns error' do
+        subject
+
+        expect(response).to have_http_status :not_found
+        expect(json['errors']).to include('User not found')
       end
 
-      context 'with valid params' do
-        it 'updates the given user' do
-          subject
-
-          expect(response).to have_http_status :ok
-          expect(json['message']).to eq('User updated with success')
-          expect(current_user.reload.email).to eq('new-foobar@mail.com')
-        end
-      end
-
-      context 'with invalid params' do
-        let(:email) { 'second.user@mail.com' }
-
-        it 'returns errors' do
-          subject
-
-          expect(response).to have_http_status :unprocessable_entity
-          expect(json['errors']).to include('Email has already been taken')
-        end
-      end
-
-      context 'when JWT Token is invalid' do
-        let(:jwt_token) { 'invalid-token' }
-
-        it 'returns Unauthorized' do
-          subject
-
-          expect(response).to have_http_status :unauthorized
-          expect(JSON.parse(response.body)).to include('message' => 'Unauthorized')
-        end
-      end
-    end
-
-    describe '#destroy' do
-      subject { delete(admin_user_path(params), headers: { Authorization: jwt_token }) }
-
-      context 'with existing user' do
-        let(:params) { current_user.slug }
-
-        it 'destroys the given user' do
-          subject
-
-          expect(response).to have_http_status :ok
-          expect { current_user.reload }.to raise_error(ActiveRecord::RecordNotFound)
-          expect(json['message']).to include('User deleted with success')
-        end
-      end
-
-      context 'with non existing user' do
-        let(:params) { 'non-existing-user' }
-
-        it 'returns error' do
-          subject
-
-          expect(response).to have_http_status :not_found
-          expect(json['errors']).to include('User not found')
-        end
-
-        context 'when JWT Token is invalid' do
-          let(:jwt_token) { 'invalid-token' }
-
-          it 'returns Unauthorized' do
-            subject
-
-            expect(response).to have_http_status :unauthorized
-            expect(JSON.parse(response.body)).to include('message' => 'Unauthorized')
-          end
-        end
-      end
+      include_examples 'Invalid JWT Token'
     end
   end
 end
