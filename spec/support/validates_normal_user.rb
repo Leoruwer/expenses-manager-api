@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.shared_examples 'Unauthorize normal user' do
+RSpec.shared_examples 'Unauthorize user that does not have admin role' do
   context 'when user is not admin' do
     let!(:current_user) { create(:user) }
 

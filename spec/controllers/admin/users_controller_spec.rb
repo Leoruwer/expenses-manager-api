@@ -22,7 +22,7 @@ RSpec.describe Admin::UsersController, type: :request do
     end
 
     include_examples 'Invalid JWT Token'
-    include_examples 'Unauthorize normal user'
+    include_examples 'Unauthorize user that does not have admin role'
   end
 
   describe '#show' do
@@ -53,7 +53,7 @@ RSpec.describe Admin::UsersController, type: :request do
     end
 
     include_examples 'Invalid JWT Token'
-    include_examples 'Unauthorize normal user'
+    include_examples 'Unauthorize user that does not have admin role'
   end
 
   describe '#update' do
@@ -99,7 +99,7 @@ RSpec.describe Admin::UsersController, type: :request do
     end
 
     include_examples 'Invalid JWT Token'
-    include_examples 'Unauthorize normal user'
+    include_examples 'Unauthorize user that does not have admin role'
   end
 
   describe '#destroy' do
@@ -128,7 +128,7 @@ RSpec.describe Admin::UsersController, type: :request do
       end
 
       include_examples 'Invalid JWT Token'
-      include_examples 'Unauthorize normal user'
+      include_examples 'Unauthorize user that does not have admin role'
     end
   end
 end
