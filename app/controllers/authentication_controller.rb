@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AuthenticationController < ApplicationController
-  before_action :authorize_request, except: :login
+  before_action :authorize_user, except: :login
 
   def login
     user = User.find_by(email: params[:email])
