@@ -51,9 +51,9 @@ RSpec.describe YearsController, type: :request do
     end
 
     context 'when year from another user' do
-      let (:slug) { another_year.slug }
+      let(:slug) { another_year.slug }
 
-      it "returns year not found" do
+      it 'returns year not found' do
         subject
 
         expect(response).to have_http_status :not_found
@@ -124,7 +124,7 @@ RSpec.describe YearsController, type: :request do
     context 'when year from another user' do
       let(:slug) { another_year.slug }
 
-      it "returns year not found" do
+      it 'returns year not found' do
         subject
 
         expect(response).to have_http_status :not_found
@@ -162,7 +162,7 @@ RSpec.describe YearsController, type: :request do
     context 'when year from another user' do
       let(:slug) { another_year.slug }
 
-      it "returns year not found" do
+      it 'returns year not found' do
         subject
 
         expect(response).to have_http_status :not_found
