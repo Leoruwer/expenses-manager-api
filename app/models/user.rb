@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  after_initialize :slugify_user
+  after_initialize :slugify_name
 
   has_secure_password
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
@@ -22,7 +22,7 @@ class User < ApplicationRecord
 
   private
 
-  def slugify_user
-    self.slug = "#{name}-#{SecureRandom.hex(3)}".downcase.parameterize
+  def slugify_name
+    slugify(name)
   end
 end

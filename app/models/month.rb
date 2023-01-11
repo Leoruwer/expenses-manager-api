@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Month < ApplicationRecord
-  after_initialize :slugify_user
+  after_initialize :slugify_name
 
   validates :name, presence: true
   validates :slug, uniqueness: true
@@ -10,7 +10,7 @@ class Month < ApplicationRecord
 
   private
 
-  def slugify_user
-    self.slug = "#{name}-#{SecureRandom.hex(3)}".downcase.parameterize
+  def slugify_name
+    slugify(name)
   end
 end
