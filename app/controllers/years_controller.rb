@@ -55,7 +55,7 @@ class YearsController < ApplicationController
 
   def year_params
     params.permit(
-      :name, :user_id
+      :name
     )
   end
 end
