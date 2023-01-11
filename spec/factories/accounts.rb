@@ -2,10 +2,10 @@
 
 FactoryBot.define do
   factory :account do
-    bill_name = Faker::Game.unique.title
+    account_name = Faker::Game.unique.title
 
-    name { bill_name }
-    slug { Faker::Internet.slug(words: "#{bill_name} #{SecureRandom.hex(3)}") }
+    name { account_name }
+    slug { Faker::Internet.slug(words: "#{account_name} #{SecureRandom.hex(3)}") }
 
     association :user
   end
