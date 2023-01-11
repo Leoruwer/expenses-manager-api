@@ -59,7 +59,7 @@ RSpec.describe MonthsController, type: :request do
     let(:name) { 'New month name' }
     let(:params) do
       {
-        name: name,
+        name: name
       }
     end
 
