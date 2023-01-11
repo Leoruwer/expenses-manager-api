@@ -2,7 +2,11 @@
 
 FactoryBot.define do
   factory :year do
-    name { 'Year' }
-    slug { 'year-1' }
+    year_name = Faker::Game.unique.title
+
+    name { year_name }
+    slug { Faker::Internet.slug(words: "#{year_name} #{SecureRandom.hex(3)}") }
+
+    association :user
   end
 end
