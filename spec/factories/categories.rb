@@ -2,7 +2,11 @@
 
 FactoryBot.define do
   factory :category do
-    name { 'Category' }
-    slug { 'category-1' }
+    category_name = Faker::Game.unique.title
+
+    name { category_name }
+    slug { Faker::Internet.slug(words: "#{category_name} #{SecureRandom.hex(3)}") }
+
+    association :user
   end
 end
