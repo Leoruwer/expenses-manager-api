@@ -2,7 +2,9 @@
 
 FactoryBot.define do
   factory :month do
-    name { 'Month' }
-    slug { 'month-1' }
+    month_name = Faker::Game.unique.title
+
+    name { month_name }
+    slug { Faker::Internet.slug(words: "#{month_name} #{SecureRandom.hex(3)}") }
   end
 end
