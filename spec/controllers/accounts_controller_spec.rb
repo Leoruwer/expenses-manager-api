@@ -109,8 +109,19 @@ RSpec.describe AccountsController, type: :request do
         subject
 
         expect(response).to have_http_status :ok
-        expect(json['message']).to eq('Account updated with success')
+        expect(json['message']).to include('Account updated with success')
         expect(current_account.reload.name).to eq('New account name')
+      end
+
+      context 'when name is invalid' do
+        let(:name) { nil }
+
+        it "returns name can't be blank" do
+          subject
+
+          expect(response).to have_http_status :unprocessable_entity
+          expect(json['errors']).to include("Name can't be blank")
+        end
       end
 
       context 'when account from another user' do
