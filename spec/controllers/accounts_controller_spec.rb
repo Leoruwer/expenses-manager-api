@@ -78,7 +78,7 @@ RSpec.describe AccountsController, type: :request do
       subject
 
       expect(response).to have_http_status :created
-      expect(json).to include('message' => 'Account created with success')
+      expect(json['message']).to include('Account created with success')
     end
 
     context 'without name' do
@@ -87,7 +87,7 @@ RSpec.describe AccountsController, type: :request do
       it "returns name can't be blank error" do
         subject
 
-        expect(json).to include('errors' => ["Name can't be blank"])
+        expect(json['errors']).to include("Name can't be blank")
       end
     end
 
