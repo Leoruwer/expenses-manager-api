@@ -6,5 +6,7 @@ FactoryBot.define do
 
     name { month_name }
     slug { Faker::Internet.slug(words: "#{month_name} #{SecureRandom.hex(3)}") }
+
+    association :user
   end
 end

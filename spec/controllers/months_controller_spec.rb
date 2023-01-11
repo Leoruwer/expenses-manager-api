@@ -6,7 +6,7 @@ RSpec.describe MonthsController, type: :request do
   let!(:current_user) { create(:user) }
 
   let!(:current_month) { create(:month, name: 'Month', user_id: current_user.id) }
-  let(:second_month) { create(:month) }
+  let(:another_month) { create(:month) }
 
   let(:jwt_token) { JsonWebToken.encode(user_id: current_user.id) }
   let(:json) { JSON.parse(response.body) }
@@ -46,7 +46,18 @@ RSpec.describe MonthsController, type: :request do
         subject
 
         expect(response).to have_http_status :not_found
-        expect(json).to include('errors' => 'Month not found')
+        expect(json['errors']).to include('Month not found')
+      end
+    end
+
+    context 'when month from another user' do
+      let(:slug) { another_month.slug }
+
+      it 'returns month not found' do
+        subject
+
+        expect(response).to have_http_status :not_found
+        expect(json['errors']).to include('Month not found')
       end
     end
 
@@ -84,8 +95,9 @@ RSpec.describe MonthsController, type: :request do
   end
 
   describe '#update' do
-    subject { put(month_path(current_month.slug), headers: { Authorization: jwt_token }, params: params) }
+    subject { put(month_path(slug), headers: { Authorization: jwt_token }, params: params) }
 
+    let(:slug) { current_month.slug }
     let(:name) { 'New month name' }
     let(:params) do
       {
@@ -111,6 +123,17 @@ RSpec.describe MonthsController, type: :request do
       end
     end
 
+    context 'when month from another user' do
+      let(:slug) { another_month.slug }
+
+      it 'returns month not found' do
+        subject
+
+        expect(response).to have_http_status :not_found
+        expect(json['errors']).to include('Month not found')
+      end
+    end
+
     include_examples 'Invalid JWT Token'
   end
 
@@ -131,6 +154,17 @@ RSpec.describe MonthsController, type: :request do
       let(:slug) { 'non-existing-month' }
 
       it 'returns error' do
+        subject
+
+        expect(response).to have_http_status :not_found
+        expect(json['errors']).to include('Month not found')
+      end
+    end
+
+    context 'when month from another user' do
+      let(:slug) { another_month.slug }
+
+      it 'returns month not found' do
         subject
 
         expect(response).to have_http_status :not_found
