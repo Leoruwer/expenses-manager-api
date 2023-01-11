@@ -55,7 +55,7 @@ class MonthsController < ApplicationController
 
   def month_params
     params.permit(
-      :name, :user_id
+      :name
     )
   end
 end
