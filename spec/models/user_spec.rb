@@ -17,7 +17,9 @@ RSpec.describe User do
 
   context 'with valid params' do
     it 'is valid' do
-      expect(described_class.new(params)).to be_valid
+      user = described_class.new(params)
+
+      expect(user).to be_valid
     end
 
     it 'generates slug' do

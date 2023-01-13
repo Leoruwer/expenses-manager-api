@@ -5,14 +5,18 @@ require 'rails_helper'
 RSpec.describe DefaultBill do
   let!(:current_user) { create(:user) }
 
-  it 'is valid with valid params' do
-    expect(described_class.new(name: 'Default Bill', user: current_user)).to be_valid
-  end
+  context 'with valid params' do
+    it 'is valid' do
+      default_bill = described_class.new(name: 'Default Bill', user: current_user)
 
-  it 'generates slug' do
-    default_bill = described_class.create(name: 'Default Bill', user: current_user)
+      expect(default_bill).to be_valid
+    end
 
-    expect(default_bill.slug).to match('default-bill')
+    it 'generates slug' do
+      default_bill = described_class.create(name: 'Default Bill', user: current_user)
+
+      expect(default_bill.slug).to match('default-bill')
+    end
   end
 
   describe '#model validations' do

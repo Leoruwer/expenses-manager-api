@@ -5,14 +5,18 @@ require 'rails_helper'
 RSpec.describe Account do
   let!(:current_user) { create(:user) }
 
-  it 'is valid with valid params' do
-    expect(described_class.new(name: 'Account', user: current_user)).to be_valid
-  end
+  context 'with valid params' do
+    it 'is valid' do
+      account = described_class.new(name: 'Account', user: current_user)
 
-  it 'generates slug' do
-    account = described_class.create(name: 'Account name', user: current_user)
+      expect(account).to be_valid
+    end
 
-    expect(account.slug).to match('account-name')
+    it 'generates slug' do
+      account = described_class.create(name: 'Account name', user: current_user)
+
+      expect(account.slug).to match('account-name')
+    end
   end
 
   describe '#model validations' do
