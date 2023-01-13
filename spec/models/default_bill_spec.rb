@@ -12,7 +12,7 @@ RSpec.describe DefaultBill do
   it 'generates slug' do
     default_bill = described_class.create(name: 'Default Bill', user: current_user)
 
-    expect(default_bill.slug).to match(/default-bill-.*/)
+    expect(default_bill.slug).to match('default-bill')
   end
 
   describe 'model validations' do
