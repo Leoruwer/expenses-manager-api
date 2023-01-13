@@ -30,7 +30,7 @@ class CategoriesController < ApplicationController
     if category.update(category_params)
       render json: { message: 'Category updated with success' }, status: :ok
     else
-      render json: { errors: @category.errors.full_messages },
+      render json: { errors: category.errors.full_messages },
              status: :unprocessable_entity
     end
   end
@@ -54,8 +54,6 @@ class CategoriesController < ApplicationController
   end
 
   def category_params
-    params.permit(
-      :name
-    )
+    params.permit(:name)
   end
 end

@@ -29,7 +29,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_05_125856) do
     t.string "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
+    t.bigint "user_id", null: false
+    t.index ["slug"], name: "index_categories_on_slug", unique: true
     t.index ["user_id"], name: "index_categories_on_user_id"
   end
 
