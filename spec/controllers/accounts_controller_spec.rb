@@ -6,7 +6,7 @@ RSpec.describe AccountsController, type: :request do
   let!(:current_user) { create(:user) }
 
   let!(:current_account) { create(:account, name: 'Account', user_id: current_user.id) }
-  let(:another_account) { create(:account) }
+  let(:another_account) { create(:account, name: 'Account') }
 
   let(:jwt_token) { JsonWebToken.encode(user_id: current_user.id) }
   let(:json) { JSON.parse(response.body) }
