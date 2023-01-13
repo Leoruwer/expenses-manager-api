@@ -113,6 +113,17 @@ RSpec.describe CategoriesController, type: :request do
       expect(current_category.reload.name).to eq('New category name')
     end
 
+    context 'when name is invalid' do
+      let(:name) { nil }
+
+      it "returns name can't be blank" do
+        subject
+
+        expect(response).to have_http_status :unprocessable_entity
+        expect(json['errors']).to include("Name can't be blank")
+      end
+    end
+
     context 'when category from another user' do
       let(:slug) { another_category.slug }
 
