@@ -27,7 +27,7 @@ RSpec.describe User do
     end
   end
 
-  describe 'model validations' do
+  context 'model validations' do
     context 'when name is not present' do
       let(:name) { nil }
 

@@ -15,7 +15,7 @@ RSpec.describe Account do
     expect(account.slug).to match('account-name')
   end
 
-  describe 'model validations' do
+  context 'model validations' do
     it 'validates name presence' do
       account = described_class.new(name: nil, user: current_user)
 
