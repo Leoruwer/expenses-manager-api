@@ -6,7 +6,7 @@ class CreateCategories < ActiveRecord::Migration[7.0]
 
       t.timestamps
 
-      t.references :user, null: false, index: true, on_delete: :cascade
+      t.references :user, nil: false, index: true, on_delete: :cascade
     end
   end
 end
