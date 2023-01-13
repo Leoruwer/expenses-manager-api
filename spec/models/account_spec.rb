@@ -19,7 +19,7 @@ RSpec.describe Account do
     end
   end
 
-  describe '#model validations' do
+  describe 'model validations' do
     it 'validates name presence' do
       account = described_class.new(name: nil, user: current_user)
 

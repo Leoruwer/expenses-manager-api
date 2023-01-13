@@ -19,7 +19,7 @@ RSpec.describe DefaultBill do
     end
   end
 
-  describe '#model validations' do
+  describe 'model validations' do
     it 'validates name presence' do
       default_bill = described_class.new(name: nil, user: current_user)
 
