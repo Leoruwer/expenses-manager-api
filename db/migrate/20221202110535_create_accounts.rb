@@ -2,11 +2,11 @@ class CreateAccounts < ActiveRecord::Migration[7.0]
   def change
     create_table :accounts do |t|
       t.string :name, nil: false
-      t.string :slug, nil: false
+      t.string :slug, nil: false, index: { unique: true }
 
       t.timestamps
-    end
 
-    add_reference :accounts, :user, index: true
+      t.references :user, nil: false, index: true, on_delete: :cascade
+    end
   end
 end

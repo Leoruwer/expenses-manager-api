@@ -30,7 +30,7 @@ class AccountsController < ApplicationController
     if account.update(account_params)
       render json: { message: 'Account updated with success' }, status: :ok
     else
-      render json: { errors: @account.errors.full_messages },
+      render json: { errors: account.errors.full_messages },
              status: :unprocessable_entity
     end
   end
@@ -54,8 +54,6 @@ class AccountsController < ApplicationController
   end
 
   def account_params
-    params.permit(
-      :name
-    )
+    params.permit(:name)
   end
 end
