@@ -3,8 +3,8 @@
 class Account < ApplicationRecord
   after_initialize :slugify_name
 
-  validates :name, presence: true
-  validates :slug, uniqueness: true
+  validates :name, presence: true, uniqueness: { scope: :user }
+  validates :slug, uniqueness: { scope: :user }
 
   belongs_to :user
 
