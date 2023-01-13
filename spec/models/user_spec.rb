@@ -28,7 +28,7 @@ RSpec.describe User do
   end
 
   describe 'model validations' do
-    context 'validates name presence' do
+    context 'when name is not present' do
       let(:name) { nil }
 
       it 'is not valid' do
@@ -38,7 +38,7 @@ RSpec.describe User do
       end
     end
 
-    context 'validates email presence' do
+    context 'when email is not present' do
       let(:email) { nil }
 
       it 'is not valid' do
@@ -48,7 +48,7 @@ RSpec.describe User do
       end
     end
 
-    context 'validates password presence' do
+    context 'when password is not present' do
       let(:password) { nil }
 
       it 'is not valid' do
@@ -58,7 +58,7 @@ RSpec.describe User do
       end
     end
 
-    context 'validates email uniqueness' do
+    context 'when email is not unique' do
       let!(:another_user) { create(:user, email: 'user@mail.com') }
 
       it 'is not valid' do
