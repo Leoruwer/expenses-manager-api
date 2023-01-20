@@ -91,6 +91,31 @@ RSpec.describe AccountsController, type: :request do
       end
     end
 
+    context 'validates name uniqueness' do
+      context 'when the user has account with same name' do
+        let!(:existing_account) { create(:account, user: current_user) }
+        let(:name) { existing_account.name }
+
+        it 'is not valid ' do
+          subject
+
+          expect(json['errors']).to include('Name has already been taken')
+        end
+      end
+
+      context 'when another user has account with same name' do
+        let!(:another_user) { create(:user) }
+        let!(:existing_account) { create(:account, user: another_user) }
+        let(:name) { existing_account.name }
+
+        it 'is valid ' do
+          subject
+
+          expect(json['message']).to include('Account created with success')
+        end
+      end
+    end
+
     include_examples 'Invalid JWT Token'
   end
 

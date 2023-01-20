@@ -25,5 +25,23 @@ RSpec.describe Account do
 
       expect(account).not_to be_valid
     end
+
+    context 'validates name uniqueness' do
+      let!(:another_user) { create(:user) }
+
+      it 'is not valid when the user has account with same name' do
+        described_class.create(name: 'Account', user: current_user)
+        default_bill = described_class.new(name: 'Account', user: current_user)
+
+        expect(default_bill).not_to be_valid
+      end
+
+      it 'is valid when another user has account with same name' do
+        described_class.create(name: 'Account', user: another_user)
+        default_bill = described_class.new(name: 'Account', user: current_user)
+
+        expect(default_bill).to be_valid
+      end
+    end
   end
 end
