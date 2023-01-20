@@ -27,7 +27,7 @@ RSpec.describe DefaultBill do
       expect(default_bill).not_to be_valid
     end
 
-    context 'validates name uniqueness' do
+    describe 'validates name uniqueness' do
       let!(:another_user) { create(:user) }
 
       it 'is not valid when the user has default bill with same name' do

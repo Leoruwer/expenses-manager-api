@@ -26,7 +26,7 @@ RSpec.describe Account do
       expect(account).not_to be_valid
     end
 
-    context 'validates name uniqueness' do
+    describe 'validates name uniqueness' do
       let!(:another_user) { create(:user) }
 
       it 'is not valid when the user has account with same name' do
