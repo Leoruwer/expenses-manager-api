@@ -1,9 +1,8 @@
-class CreateDefaultBills < ActiveRecord::Migration[7.0]
+class CreateAccounts < ActiveRecord::Migration[7.0]
   def change
-    create_table :default_bills do |t|
+    create_table :accounts do |t|
       t.string :name, null: false
       t.string :slug, null: false, index: true
-      t.monetize :value, null: true
 
       t.timestamps
 

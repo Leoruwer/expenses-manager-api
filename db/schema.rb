@@ -14,25 +14,36 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_05_125856) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "accounts", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["slug"], name: "index_accounts_on_slug"
+    t.index ["user_id"], name: "index_accounts_on_user_id"
+  end
+
   create_table "default_bills", force: :cascade do |t|
-    t.string "name"
-    t.string "slug"
+    t.string "name", null: false
+    t.string "slug", null: false
     t.integer "value_in_cents", default: 0, null: false
     t.string "value_currency", default: "BRL", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
+    t.bigint "user_id", null: false
+    t.index ["slug"], name: "index_default_bills_on_slug"
     t.index ["user_id"], name: "index_default_bills_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.string "password_digest"
+    t.string "name", null: false
+    t.string "email", null: false
+    t.string "slug", null: false
+    t.string "password_digest", null: false
     t.integer "role", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "slug"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

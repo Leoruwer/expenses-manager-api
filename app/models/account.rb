@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
-class DefaultBill < ApplicationRecord
+class Account < ApplicationRecord
   after_initialize :slugify_name
 
   validates :name, presence: true, uniqueness: { scope: :user }
   validates :slug, uniqueness: { scope: :user }
-
-  monetize :value_in_cents
 
   belongs_to :user
 

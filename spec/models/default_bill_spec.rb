@@ -1,18 +1,23 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'spec_helper'
 
 RSpec.describe DefaultBill do
   let!(:current_user) { create(:user) }
 
-  it 'is valid with valid params' do
-    expect(described_class.new(name: 'Default Bill', user: current_user)).to be_valid
-  end
+  context 'with valid params' do
+    it 'is valid' do
+      default_bill = described_class.new(name: 'Default Bill', user: current_user)
 
-  it 'generates slug' do
-    default_bill = described_class.create(name: 'Default Bill', user: current_user)
+      expect(default_bill).to be_valid
+    end
 
-    expect(default_bill.slug).to match(/default-bill-.*/)
+    it 'generates slug' do
+      default_bill = described_class.create(name: 'Default Bill', user: current_user)
+
+      expect(default_bill.slug).to match('default-bill')
+    end
   end
 
   describe 'model validations' do
@@ -20,6 +25,24 @@ RSpec.describe DefaultBill do
       default_bill = described_class.new(name: nil, user: current_user)
 
       expect(default_bill).not_to be_valid
+    end
+
+    describe 'validates name uniqueness' do
+      let!(:another_user) { create(:user) }
+
+      it 'is not valid when the user has default bill with same name' do
+        described_class.create(name: 'Default Bill', user: current_user)
+        default_bill = described_class.new(name: 'Default Bill', user: current_user)
+
+        expect(default_bill).not_to be_valid
+      end
+
+      it 'is valid when another user has default bill with same name' do
+        described_class.create(name: 'Default Bill', user: another_user)
+        default_bill = described_class.new(name: 'Default Bill', user: current_user)
+
+        expect(default_bill).to be_valid
+      end
     end
   end
 end

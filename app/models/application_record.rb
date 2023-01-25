@@ -6,6 +6,6 @@ class ApplicationRecord < ActiveRecord::Base
   protected
 
   def slugify(value)
-    self.slug = "#{value}-#{SecureRandom.hex(3)}".downcase.parameterize if value.present?
+    self.slug = value.downcase.parameterize if value.present?
   end
 end

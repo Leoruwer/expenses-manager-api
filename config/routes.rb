@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   end
 
   resources :default_bills, param: :slug
+  resources :accounts, param: :slug
 
   post '/auth/login', to: 'authentication#login'
   post '/register', to: 'users#create'
