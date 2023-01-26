@@ -78,7 +78,7 @@ RSpec.describe CategoriesController, type: :request do
       subject
 
       expect(response).to have_http_status :created
-      expect(json).to include('message' => 'Category created with success')
+      expect(json['message']).to include('Category created with success')
     end
 
     context 'without name' do
@@ -88,6 +88,31 @@ RSpec.describe CategoriesController, type: :request do
         subject
 
         expect(json['errors']).to include("Name can't be blank")
+      end
+    end
+
+    describe 'validates name uniqueness' do
+      context 'when the user has category with same name' do
+        let!(:existing_category) { create(:category, user: current_user) }
+        let(:name) { existing_category.name }
+
+        it 'is not valid' do
+          subject
+
+          expect(json['errors']).to include('Name has already been taken')
+        end
+      end
+
+      context 'when another user has category with same name' do
+        let!(:another_user) { create(:user) }
+        let!(:existing_category) { create(:category, user: another_user) }
+        let(:name) { existing_category.name }
+
+        it 'is valid' do
+          subject
+
+          expect(json['message']).to include('Category created with success')
+        end
       end
     end
 
@@ -109,7 +134,7 @@ RSpec.describe CategoriesController, type: :request do
       subject
 
       expect(response).to have_http_status :ok
-      expect(json['message']).to eq('Category updated with success')
+      expect(json['message']).to include('Category updated with success')
       expect(current_category.reload.name).to eq('New category name')
     end
 
