@@ -8,6 +8,9 @@ class CreateDefaultBills < ActiveRecord::Migration[7.0]
       t.timestamps
 
       t.references :user, null: false, index: true, on_delete: :cascade
+
+      t.index ["slug", "user_id"], name: "user_id_default_bills_slug_index", unique: true
+      t.index ["name", "user_id"], name: "user_id_default_bills_name_index", unique: true
     end
   end
 end
