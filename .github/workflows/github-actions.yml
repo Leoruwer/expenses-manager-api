@@ -60,7 +60,8 @@ jobs:
         run: bundle install
 
       - name: Create database
-        run: bundle exec rails db:setup
+        run: bundle exec rails db:create
+        run: bundle exec rails db:migrate
 
       - name: Run tests
         run: bundle exec rspec
