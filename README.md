@@ -275,7 +275,6 @@ Response:
 }
 ```
 
-
 #### POST: /accounts/[slug]
 
 ##### Update given Account
@@ -305,7 +304,6 @@ Response:
   "message": "String"
 }
 ```
-
 
 ### Categories
 
