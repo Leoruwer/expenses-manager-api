@@ -19,8 +19,6 @@ module Admin
     def update
       return render_user_not_found if user.blank?
 
-      binding.pry
-
       if user.update(user_params)
         render json: { message: 'User updated with success' }, status: :ok
       else
