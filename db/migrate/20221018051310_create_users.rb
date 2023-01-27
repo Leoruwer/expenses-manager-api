@@ -8,6 +8,8 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.integer :role, default: 0
 
       t.timestamps
+
+      t.index "slug", name: "user_slug_index", unique: true
     end
   end
 end
