@@ -1,30 +1,387 @@
 # API Endpoints
 
-### Create Users
-###### POST: /users
-```
+## Public Endpoints
+
+### Login
+
+#### POST: /auth/login
+
+##### Returns user JWT-Token
+
+```json
 {
-  name: 'string'
-  email: 'string'
-  password: 'string'
-  password_confirmation: 'string'
+  "email": "String",
+  "password": "String"
 }
 ```
 
-### Login
-###### POST: /auth/login
-```
+Response:
+
+```json
 {
-  email: 'string'
-  password: 'string'
+  "token": "String",
+  "exp": "String",
+  "email": "String"
 }
 ```
-### Get all Users
-###### GET: /users
-```
-headers: {
-  Authorization: 'jwt-token'
+
+### Register
+
+#### POST: /register
+
+##### Creates new User
+
+```json
+{
+  "email": "String",
+  "name": "String",
+  "password": "String",
+  "password_confirmation": "String"
 }
 ```
-### Get user
-###### GET: /users/{slug}
+
+Response:
+
+```json
+{
+  "name": "String",
+  "email": "String",
+  "slug": "String",
+  "role": "String"
+}
+```
+
+## Admin Endpoints
+
+All requests must have:
+
+```json
+{
+  "headers": {
+    "Authorization": "String" // JWT-Token for User with Admin Role
+  }
+}
+```
+
+### Users
+
+#### GET: /admin/users
+
+##### Find all Users
+
+Response:
+
+```json
+[
+  {
+    "name": "String",
+    "email": "String",
+    "slug": "String",
+    "role": "String"
+  }
+]
+```
+
+#### GET: /admin/users/[slug]
+
+##### Show given User
+
+Response:
+
+```json
+{
+  "name": "String",
+  "email": "String",
+  "slug": "String",
+  "role": "String"
+}
+```
+
+#### PUT: /admin/users/[slug]
+
+##### Update given User
+
+```json
+{
+  "name": "String",
+  "password": "String",
+  "password_confirmation": "String",
+  "email": "String",
+  "role": "String" // Available Options: "user" and "admin"
+}
+```
+
+Response:
+
+```json
+{
+  "message": "String"
+}
+```
+
+#### DESTROY: /admin/users/[slug]
+
+##### Destroy given User
+
+Response:
+
+```json
+{
+  "message": "String"
+}
+```
+
+## User Endpoints
+
+All Requests are related to User
+All requests must have:
+
+```json
+{
+  "headers": {
+    "Authorization": "String" // JWT-Token for any User
+  }
+}
+```
+
+### Default Bills
+
+#### GET: /default_bills
+
+##### Find all Default Bills
+
+Response:
+
+```json
+[
+  {
+    "name": "String",
+    "slug": "String",
+    "value_in_cents": "Integer"
+  }
+]
+```
+
+#### POST: /default_bills
+
+##### Create Default Bill
+
+```json
+{
+  "name": "String",
+  "value_in_cents": "Integer"
+}
+```
+
+Response:
+
+```json
+{
+  "message": "String"
+}
+```
+
+#### GET: /default_bills/[slug]
+
+##### Show given Default Bill
+
+Response:
+
+```json
+{
+  "name": "String",
+  "slug": "String",
+  "value_in_cents": "Integer"
+}
+```
+
+#### POST: /default_bills/[slug]
+
+##### Update given Default Bill
+
+```json
+{
+  "name": "String",
+  "value_in_cents": "Integer"
+}
+```
+
+Response:
+
+```json
+{
+  "message": "String"
+}
+```
+
+#### DESTROY: /default_bills/[slug]
+
+##### Destroy given Default Bill
+
+Response:
+
+```json
+{
+  "message": "String"
+}
+```
+
+### Accounts
+
+#### GET: /accounts
+
+##### Find all Accounts
+
+Response:
+
+```json
+[
+  {
+    "name": "String",
+    "slug": "String",
+  }
+]
+```
+
+#### POST: /accounts
+
+##### Create Account
+
+```json
+{
+  "name": "String",
+}
+```
+
+Response:
+
+```json
+{
+  "message": "String"
+}
+```
+
+#### GET: /accounts/[slug]
+
+##### Show given Account
+
+Response:
+
+```json
+{
+  "name": "String",
+  "slug": "String",
+  "value_in_cents": "Integer"
+}
+```
+
+
+#### POST: /accounts/[slug]
+
+##### Update given Account
+
+```json
+{
+  "name": "String",
+}
+```
+
+Response:
+
+```json
+{
+  "message": "String"
+}
+```
+
+#### DESTROY: /accounts/[slug]
+
+##### Destroy given Account
+
+Response:
+
+```json
+{
+  "message": "String"
+}
+```
+
+
+### Categories
+
+#### GET: /categories
+
+##### Find all Categories
+
+Response:
+
+```json
+[
+  {
+    "name": "String",
+    "slug": "String",
+  }
+]
+```
+
+#### POST: /categories
+
+##### Create Category
+
+```json
+{
+  "name": "String",
+}
+```
+
+Response:
+
+```json
+{
+  "message": "String"
+}
+```
+
+#### GET: /categories/[slug]
+
+##### Show given Category
+
+Response:
+
+```json
+{
+  "name": "String",
+  "slug": "String",
+  "value_in_cents": "Integer"
+}
+```
+
+#### POST: /categories/[slug]
+
+##### Update given Category
+
+```json
+{
+  "name": "String",
+}
+```
+
+Response:
+
+```json
+{
+  "message": "String"
+}
+```
+
+#### DESTROY: /categories/[slug]
+
+##### Destroy given Category
+
+Response:
+
+```json
+{
+  "message": "String"
+}
+```
