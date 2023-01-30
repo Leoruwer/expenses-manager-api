@@ -6,7 +6,7 @@
 
 #### POST: /auth/login
 
-##### Returns user JWT-Token
+##### Returns user's access data
 
 ```json
 {
@@ -58,7 +58,7 @@ All requests must have:
 ```json
 {
   "headers": {
-    "Authorization": "String" // JWT-Token for User with Admin Role
+    "Authorization": "String with admin's access token"
   }
 }
 ```
@@ -67,7 +67,7 @@ All requests must have:
 
 #### GET: /admin/users
 
-##### Find all Users
+##### Show all Users
 
 Response:
 
