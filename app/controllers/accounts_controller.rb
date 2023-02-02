@@ -8,7 +8,7 @@ class AccountsController < ApplicationController
   end
 
   def show
-    return render_not_found("Account not found") if account.blank?
+    return render_not_found('Account not found') if account.blank?
 
     render json: account, status: :ok
   end
@@ -25,7 +25,7 @@ class AccountsController < ApplicationController
   end
 
   def update
-    return render_not_found("Account not found") if account.blank?
+    return render_not_found('Account not found') if account.blank?
 
     if account.update(account_params)
       render json: { message: 'Account updated with success' }, status: :ok
@@ -36,7 +36,7 @@ class AccountsController < ApplicationController
   end
 
   def destroy
-    return render_not_found("Account not found") if account.blank?
+    return render_not_found('Account not found') if account.blank?
 
     account.destroy
 
