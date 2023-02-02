@@ -11,13 +11,13 @@ module Admin
     end
 
     def show
-      return render_user_not_found if user.blank?
+      return render_not_found('User not found') if user.blank?
 
       render json: user, status: :ok
     end
 
     def update
-      return render_user_not_found if user.blank?
+      return render_not_found('User not found') if user.blank?
 
       if user.update(user_params)
         render json: { message: 'User updated with success' }, status: :ok
@@ -28,7 +28,7 @@ module Admin
     end
 
     def destroy
-      return render_user_not_found if user.blank?
+      return render_not_found('User not found') if user.blank?
 
       user.destroy
 
@@ -39,10 +39,6 @@ module Admin
 
     def user
       @user ||= User.find_by(slug: params[:slug])
-    end
-
-    def render_user_not_found
-      render json: { errors: 'User not found' }, status: :not_found
     end
 
     def user_params

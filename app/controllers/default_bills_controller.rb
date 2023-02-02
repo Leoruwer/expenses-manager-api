@@ -8,7 +8,7 @@ class DefaultBillsController < ApplicationController
   end
 
   def show
-    return render_default_bill_not_found if default_bill.blank?
+    return render_not_found('Default Bill not found') if default_bill.blank?
 
     render json: default_bill, status: :ok
   end
@@ -25,7 +25,7 @@ class DefaultBillsController < ApplicationController
   end
 
   def update
-    return render_default_bill_not_found if default_bill.blank?
+    return render_not_found('Default Bill not found') if default_bill.blank?
 
     if default_bill.update(default_bill_params)
       render json: { message: 'Default Bill updated with success' }, status: :ok
@@ -36,7 +36,7 @@ class DefaultBillsController < ApplicationController
   end
 
   def destroy
-    return render_default_bill_not_found if default_bill.blank?
+    return render_not_found('Default Bill not found') if default_bill.blank?
 
     default_bill.destroy
 
@@ -47,10 +47,6 @@ class DefaultBillsController < ApplicationController
 
   def default_bill
     @default_bill ||= current_user.default_bills.find_by(slug: params[:slug])
-  end
-
-  def render_default_bill_not_found
-    render json: { errors: 'Default Bill not found' }, status: :not_found
   end
 
   def default_bill_params

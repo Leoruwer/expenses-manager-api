@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::API
-  def not_found
-    render json: { error: 'not_found' }
+  def render_not_found(message = 'not found')
+    render json: { errors: message }, status: :not_found
   end
 
   def authorize_user
