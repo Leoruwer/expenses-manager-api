@@ -2,7 +2,7 @@
 
 Rails.application.routes.draw do
   namespace :admin do
-    resources :users, param: :slug
+    resources :users, param: :slug, except: :create
   end
 
   resources :default_bills, param: :slug

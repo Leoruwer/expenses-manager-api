@@ -3,7 +3,6 @@
 module Admin
   class UsersController < ApplicationController
     before_action :authorize_only_admin
-    before_action :find_user, except: %i[create index]
 
     def index
       users = User.all
@@ -12,40 +11,34 @@ module Admin
     end
 
     def show
-      render json: @user, status: :ok
-    end
+      return render_not_found('User not found') if user.blank?
 
-    def create
-      new_user = User.new(user_params)
-      if new_user.save
-        render json: new_user, status: :created
-      else
-        render json: { errors: new_user.errors.full_messages },
-               status: :unprocessable_entity
-      end
+      render json: user, status: :ok
     end
 
     def update
-      if @user.update(user_params)
+      return render_not_found('User not found') if user.blank?
+
+      if user.update(user_params)
         render json: { message: 'User updated with success' }, status: :ok
       else
-        render json: { errors: @user.errors.full_messages },
+        render json: { errors: user.errors.full_messages },
                status: :unprocessable_entity
       end
     end
 
     def destroy
-      @user.destroy
+      return render_not_found('User not found') if user.blank?
+
+      user.destroy
 
       render json: { message: 'User deleted with success' }, status: :ok
     end
 
     private
 
-    def find_user
-      @user = User.find_by!(slug: params[:slug])
-    rescue ActiveRecord::RecordNotFound
-      render json: { errors: 'User not found' }, status: :not_found
+    def user
+      @user ||= User.find_by(slug: params[:slug])
     end
 
     def user_params

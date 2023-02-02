@@ -8,7 +8,7 @@ class AccountsController < ApplicationController
   end
 
   def show
-    return render_account_not_found if account.blank?
+    return render_not_found('Account not found') if account.blank?
 
     render json: account, status: :ok
   end
@@ -25,7 +25,7 @@ class AccountsController < ApplicationController
   end
 
   def update
-    return render_account_not_found if account.blank?
+    return render_not_found('Account not found') if account.blank?
 
     if account.update(account_params)
       render json: { message: 'Account updated with success' }, status: :ok
@@ -36,7 +36,7 @@ class AccountsController < ApplicationController
   end
 
   def destroy
-    return render_account_not_found if account.blank?
+    return render_not_found('Account not found') if account.blank?
 
     account.destroy
 
@@ -47,10 +47,6 @@ class AccountsController < ApplicationController
 
   def account
     @account ||= current_user.accounts.find_by(slug: params[:slug])
-  end
-
-  def render_account_not_found
-    render json: { errors: 'Account not found' }, status: :not_found
   end
 
   def account_params
