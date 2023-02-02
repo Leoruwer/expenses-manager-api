@@ -6,7 +6,7 @@ RSpec.describe CategoriesController, type: :request do
   let!(:current_user) { create(:user) }
 
   let!(:current_category) { create(:category, name: 'Category', user_id: current_user.id) }
-  let(:another_category) { create(:category, name: 'Category') }
+  let(:another_category) { create(:category) }
 
   let(:jwt_token) { JsonWebToken.encode(user_id: current_user.id) }
   let(:json) { JSON.parse(response.body) }
