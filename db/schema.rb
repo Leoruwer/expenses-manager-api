@@ -20,6 +20,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_05_125856) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["name", "user_id"], name: "user_id_accounts_name_index", unique: true
+    t.index ["slug", "user_id"], name: "user_id_accounts_slug_index", unique: true
     t.index ["slug"], name: "index_accounts_on_slug"
     t.index ["user_id"], name: "index_accounts_on_user_id"
   end
@@ -32,6 +34,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_05_125856) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["name", "user_id"], name: "user_id_default_bills_name_index", unique: true
+    t.index ["slug", "user_id"], name: "user_id_default_bills_slug_index", unique: true
     t.index ["slug"], name: "index_default_bills_on_slug"
     t.index ["user_id"], name: "index_default_bills_on_user_id"
   end
@@ -45,6 +49,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_05_125856) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["slug"], name: "user_slug_index", unique: true
   end
 
 end
