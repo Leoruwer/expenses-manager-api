@@ -68,11 +68,7 @@ RSpec.describe CategoriesController, type: :request do
     subject { post(categories_path, headers: { Authorization: jwt_token }, params: params) }
 
     let(:name) { 'New category name' }
-    let(:params) do
-      {
-        name: name
-      }
-    end
+    let(:params) { { name: name } }
 
     it 'creates a new category' do
       subject
@@ -124,11 +120,7 @@ RSpec.describe CategoriesController, type: :request do
 
     let(:slug) { current_category.slug }
     let(:name) { 'New category name' }
-    let(:params) do
-      {
-        name: name
-      }
-    end
+    let(:params) { { name: name } }
 
     it 'updates the given category' do
       subject
