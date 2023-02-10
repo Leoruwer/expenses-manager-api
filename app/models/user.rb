@@ -19,6 +19,7 @@ class User < ApplicationRecord
 
   has_many :default_bills, dependent: :destroy
   has_many :accounts, dependent: :destroy
+  has_many :categories, dependent: :destroy
 
   private
 
