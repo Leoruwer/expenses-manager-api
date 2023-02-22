@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_05_125856) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_17_192755) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +50,26 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_05_125856) do
     t.index ["slug", "user_id"], name: "user_id_default_bills_slug_index", unique: true
     t.index ["slug"], name: "index_default_bills_on_slug"
     t.index ["user_id"], name: "index_default_bills_on_user_id"
+  end
+
+  create_table "expenses", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.integer "value_in_cents", default: 0, null: false
+    t.string "value_currency", default: "BRL", null: false
+    t.datetime "due_at"
+    t.datetime "paid_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.bigint "account_id", null: false
+    t.bigint "category_id", null: false
+    t.index ["account_id"], name: "index_expenses_on_account_id"
+    t.index ["category_id"], name: "index_expenses_on_category_id"
+    t.index ["name", "user_id"], name: "user_id_expenses_name_index", unique: true
+    t.index ["slug", "user_id"], name: "user_id_expenses_slug_index", unique: true
+    t.index ["slug"], name: "index_expenses_on_slug"
+    t.index ["user_id"], name: "index_expenses_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
