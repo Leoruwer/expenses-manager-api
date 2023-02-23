@@ -126,7 +126,7 @@ RSpec.describe ExpensesController, type: :request do
         it 'returns error' do
           subject
 
-          expect(json['errors']).to include("Account must exist")
+          expect(json['errors']).to include('Account must exist')
         end
       end
 
@@ -136,7 +136,7 @@ RSpec.describe ExpensesController, type: :request do
         it 'returns error' do
           subject
 
-          expect(json['errors']).to include("Category must exist")
+          expect(json['errors']).to include('Category must exist')
         end
       end
     end
@@ -215,7 +215,7 @@ RSpec.describe ExpensesController, type: :request do
         it 'returns error' do
           subject
 
-          expect(json['errors']).to include("Account must exist")
+          expect(json['errors']).to include('Account must exist')
         end
       end
 
@@ -225,7 +225,7 @@ RSpec.describe ExpensesController, type: :request do
         it 'returns error' do
           subject
 
-          expect(json['errors']).to include("Category must exist")
+          expect(json['errors']).to include('Category must exist')
         end
       end
     end
