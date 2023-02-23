@@ -24,8 +24,8 @@ RSpec.describe ExpensesController, type: :request do
       expect(json.count).to eq(1)
       expect(json[0]['name']).to include('Expense')
       expect(json[0]['value_in_cents']).to eq(1000)
-      expect(Time.zone.parse(json[0]['paid_at'])).to eq(Time.parse('28-04-2022'))
-      expect(Time.zone.parse(json[0]['due_at'])).to eq(Time.parse('21-06-2022'))
+      expect(json[0]['paid_at']).to eq('2022-04-28T03:00:00.000Z')
+      expect(json[0]['due_at']).to eq('2022-06-21T03:00:00.000Z')
     end
 
     include_examples 'Invalid JWT Token'
@@ -126,7 +126,7 @@ RSpec.describe ExpensesController, type: :request do
         it 'returns error' do
           subject
 
-          expect(json['errors']).to include("Account can't be blank")
+          expect(json['errors']).to include("Account must exist")
         end
       end
 
@@ -136,7 +136,7 @@ RSpec.describe ExpensesController, type: :request do
         it 'returns error' do
           subject
 
-          expect(json['errors']).to include("Category can't be blank")
+          expect(json['errors']).to include("Category must exist")
         end
       end
     end
@@ -215,7 +215,7 @@ RSpec.describe ExpensesController, type: :request do
         it 'returns error' do
           subject
 
-          expect(json['errors']).to include("Account can't be blank")
+          expect(json['errors']).to include("Account must exist")
         end
       end
 
@@ -225,7 +225,7 @@ RSpec.describe ExpensesController, type: :request do
         it 'returns error' do
           subject
 
-          expect(json['errors']).to include("Category can't be blank")
+          expect(json['errors']).to include("Category must exist")
         end
       end
     end
