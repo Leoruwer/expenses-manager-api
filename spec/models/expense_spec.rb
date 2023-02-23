@@ -23,7 +23,7 @@ RSpec.describe Expense do
     end
   end
 
-  describe 'model validations' do
+  describe 'with invalid params' do
     it 'validates name presence' do
       expense = described_class.new(name: nil, account: account, category: category, user: current_user)
 

@@ -76,8 +76,8 @@ RSpec.describe ExpensesController, type: :request do
 
     let(:name) { 'New expense name' }
     let(:value) { 150 }
-    let(:due_at) { Time.parse('05-01-2023') }
-    let(:paid_at) { Time.parse('02-01-2023') }
+    let(:due_at) { '05-01-2023 16:20:00' }
+    let(:paid_at) { '02-01-2023 12:00:00' }
     let(:account_id) { account.id }
     let(:category_id) { category.id }
 
