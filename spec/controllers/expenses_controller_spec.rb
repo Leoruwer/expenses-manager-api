@@ -43,6 +43,8 @@ RSpec.describe ExpensesController, type: :request do
         expect(response).to have_http_status :ok
         expect(json['name']).to include('Expense')
         expect(json['value_in_cents']).to eq(1000)
+        expect(json['paid_at']).to eq('2022-04-28T03:00:00.000Z')
+        expect(json['due_at']).to eq('2022-06-21T03:00:00.000Z')
       end
     end
 
@@ -153,8 +155,8 @@ RSpec.describe ExpensesController, type: :request do
 
     let(:name) { 'New expense name' }
     let(:value) { 150 }
-    let(:due_at) { Time.parse('05-01-2023') }
-    let(:paid_at) { Time.parse('02-01-2023') }
+    let(:due_at) { '2023-05-01T03:00:00.000Z' }
+    let(:paid_at) { '2023-01-02T03:00:00.000Z' }
     let(:account_id) { account.id }
     let(:category_id) { category.id }
 
