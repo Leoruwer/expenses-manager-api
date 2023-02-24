@@ -7,8 +7,8 @@ FactoryBot.define do
     name { expense_name }
     slug { Faker::Internet.slug(words: "#{expense_name} #{SecureRandom.hex(3)}") }
     value_in_cents { rand(100..1000) }
-    due_at { '2022-06-21T03:00:00.000Z' }
-    paid_at { '2022-04-28T03:00:00.000Z' }
+    due_at { DateTime.parse('2022-06-21 15:30:00') }
+    paid_at { DateTime.parse('2022-04-28 10:00:00') }
 
     association :user
     association :account

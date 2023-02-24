@@ -24,8 +24,8 @@ RSpec.describe ExpensesController, type: :request do
       expect(json.count).to eq(1)
       expect(json[0]['name']).to include('Expense')
       expect(json[0]['value_in_cents']).to eq(1000)
-      expect(json[0]['paid_at']).to eq('2022-04-28T03:00:00.000Z')
-      expect(json[0]['due_at']).to eq('2022-06-21T03:00:00.000Z')
+      expect(json[0]['paid_at']).to eq('2022-04-28T10:00:00.000Z')
+      expect(json[0]['due_at']).to eq('2022-06-21T15:30:00.000Z')
     end
 
     include_examples 'Invalid JWT Token'
@@ -43,8 +43,8 @@ RSpec.describe ExpensesController, type: :request do
         expect(response).to have_http_status :ok
         expect(json['name']).to include('Expense')
         expect(json['value_in_cents']).to eq(1000)
-        expect(json['paid_at']).to eq('2022-04-28T03:00:00.000Z')
-        expect(json['due_at']).to eq('2022-06-21T03:00:00.000Z')
+        expect(json['paid_at']).to eq('2022-04-28T10:00:00.000Z')
+        expect(json['due_at']).to eq('2022-06-21T15:30:00.000Z')
       end
     end
 
