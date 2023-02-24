@@ -10,15 +10,15 @@ RSpec.describe Expense do
   let(:account) { create(:account) }
 
   context 'with valid params' do
-    it 'is valid' do
-      expense = described_class.new(name: 'Expense', account: account, category: category, user: current_user)
+    subject(:expense) do
+      described_class.new(name: 'Expense Name', account: account, category: category, user: current_user)
+    end
 
+    it 'is valid' do
       expect(expense).to be_valid
     end
 
     it 'generates slug' do
-      expense = described_class.create(name: 'Expense Name', account: account, category: category, user: current_user)
-
       expect(expense.slug).to match('expense-name')
     end
   end
