@@ -165,7 +165,7 @@ RSpec.describe ExpensesController, type: :request do
         end
       end
 
-      context "when account is invalid" do
+      context 'when account is invalid' do
         let(:account_id) { 'invalid' }
 
         it 'returns error' do
@@ -175,7 +175,7 @@ RSpec.describe ExpensesController, type: :request do
         end
       end
 
-      context "when category is invalid" do
+      context 'when category is invalid' do
         let(:category_id) { 'invalid' }
 
         it 'returns error' do
@@ -298,7 +298,7 @@ RSpec.describe ExpensesController, type: :request do
         end
       end
 
-      context "when account is invalid" do
+      context 'when account is invalid' do
         let(:account_id) { 'invalid' }
 
         it 'returns error' do
@@ -308,7 +308,7 @@ RSpec.describe ExpensesController, type: :request do
         end
       end
 
-      context "when category is invalid" do
+      context 'when category is invalid' do
         let(:category_id) { 'invalid' }
 
         it 'returns error' do
