@@ -10,6 +10,7 @@ default_user = User.create(name: 'Normal User', email: 'user@user.com', password
   Expense.create(
     name: Faker::Game.unique.title,
     value_in_cents: rand(100..1000),
+    due_at: Time.now + 1.month,
     account: default_admin.accounts.first,
     category: default_admin.categories.first,
     user: default_admin
@@ -22,6 +23,7 @@ default_user = User.create(name: 'Normal User', email: 'user@user.com', password
     name: Faker::Game.unique.title,
     value_in_cents: rand(100..1000),
     account: default_user.accounts.first,
+    due_at: Time.now + 1.month,
     category: default_user.categories.first,
     user: default_user
   )

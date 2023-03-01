@@ -4,7 +4,7 @@ class CreateExpenses < ActiveRecord::Migration[7.0]
       t.string :name, null: false
       t.string :slug, null: false, index: true
       t.monetize :value, null: false
-      t.datetime :due_at, null: true, default: nil
+      t.datetime :due_at, null: false, default: nil
       t.datetime :paid_at, null: true, default: nil
 
       t.timestamps

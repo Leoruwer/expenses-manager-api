@@ -57,7 +57,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_17_192755) do
     t.string "slug", null: false
     t.integer "value_in_cents", default: 0, null: false
     t.string "value_currency", default: "BRL", null: false
-    t.datetime "due_at"
+    t.datetime "due_at", null: false
     t.datetime "paid_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
