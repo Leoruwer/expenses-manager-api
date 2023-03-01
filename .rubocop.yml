@@ -36,3 +36,6 @@ RSpec/MultipleMemoizedHelpers:
 
 RSpec/LetSetup:
   Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
