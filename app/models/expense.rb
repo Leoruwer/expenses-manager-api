@@ -6,6 +6,7 @@ class Expense < ApplicationRecord
   validates :name, presence: true, uniqueness: { scope: :user }
   validates :slug, uniqueness: { scope: :user }
   validates :value_in_cents, presence: true
+  validates :due_at, presence: true
 
   monetize :value_in_cents
 
