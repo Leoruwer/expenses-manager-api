@@ -14,6 +14,9 @@ class ExpensesController < ApplicationController
   end
 
   def create
+    return render_not_found('Account must exist') if current_user.accounts.where(id: params[:account_id]).blank?
+    return render_not_found('Category must exist') if current_user.categories.where(id: params[:category_id]).blank?
+
     new_expense = current_user.expenses.new(expense_params)
 
     if new_expense.save
@@ -26,6 +29,8 @@ class ExpensesController < ApplicationController
 
   def update
     return render_not_found('Expense not found') if expense.blank?
+    return render_not_found('Account must exist') if current_user.accounts.where(id: params[:account_id]).blank?
+    return render_not_found('Category must exist') if current_user.categories.where(id: params[:category_id]).blank?
 
     if expense.update(expense_params)
       render json: { message: 'Expense updated with success' }, status: :ok
@@ -50,6 +55,6 @@ class ExpensesController < ApplicationController
   end
 
   def expense_params
-    params.permit(:name, :value_in_cents, :account_id, :category_id)
+    params.permit(:name, :value_in_cents, :due_at, :paid_at, :account_id, :category_id)
   end
 end

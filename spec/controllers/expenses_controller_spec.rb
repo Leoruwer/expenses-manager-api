@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe ExpensesController, type: :request do
   let!(:current_user) { create(:user) }
 
-  let(:account) { create(:account) }
-  let(:category) { create(:category) }
+  let!(:account) { create(:account, user_id: current_user.id) }
+  let!(:category) { create(:category, user_id: current_user.id) }
 
   let!(:current_expense) { create(:expense, name: 'Expense', value: 10, user_id: current_user.id) }
   let!(:second_expense) { create(:expense) }
@@ -68,6 +68,19 @@ RSpec.describe ExpensesController, type: :request do
         expect(response).to have_http_status :not_found
         expect(json['errors']).to include('Expense not found')
       end
+
+      context 'when expense is from another user' do
+        let!(:another_user) { create(:user) }
+        let!(:another_expense) { create(:expense, user_id: another_user.id) }
+        let(:slug) { another_expense.slug }
+
+        it 'returns error' do
+          subject
+
+          expect(response).to have_http_status :not_found
+          expect(json['errors']).to include('Expense not found')
+        end
+      end
     end
 
     include_examples 'Invalid JWT Token'
@@ -122,6 +135,16 @@ RSpec.describe ExpensesController, type: :request do
         end
       end
 
+      context 'without due_at' do
+        let(:due_at) { nil }
+
+        it 'returns error' do
+          subject
+
+          expect(json['errors']).to include("Due at can't be blank")
+        end
+      end
+
       context 'without account' do
         let(:account_id) { nil }
 
@@ -134,6 +157,50 @@ RSpec.describe ExpensesController, type: :request do
 
       context 'without category' do
         let(:category_id) { nil }
+
+        it 'returns error' do
+          subject
+
+          expect(json['errors']).to include('Category must exist')
+        end
+      end
+
+      context "when account is invalid" do
+        let(:account_id) { 'invalid' }
+
+        it 'returns error' do
+          subject
+
+          expect(json['errors']).to include('Account must exist')
+        end
+      end
+
+      context "when category is invalid" do
+        let(:category_id) { 'invalid' }
+
+        it 'returns error' do
+          subject
+
+          expect(json['errors']).to include('Category must exist')
+        end
+      end
+
+      context 'when account is from another user' do
+        let!(:another_user) { create(:user) }
+        let!(:another_account) { create(:account, user_id: another_user.id) }
+        let(:account_id) { another_account.id }
+
+        it 'returns error' do
+          subject
+
+          expect(json['errors']).to include('Account must exist')
+        end
+      end
+
+      context 'when category is from another user' do
+        let!(:another_user) { create(:user) }
+        let!(:another_category) { create(:category, user_id: another_user.id) }
+        let(:category_id) { another_category.id }
 
         it 'returns error' do
           subject
@@ -223,6 +290,50 @@ RSpec.describe ExpensesController, type: :request do
 
       context 'without category' do
         let(:category_id) { nil }
+
+        it 'returns error' do
+          subject
+
+          expect(json['errors']).to include('Category must exist')
+        end
+      end
+
+      context "when account is invalid" do
+        let(:account_id) { 'invalid' }
+
+        it 'returns error' do
+          subject
+
+          expect(json['errors']).to include('Account must exist')
+        end
+      end
+
+      context "when category is invalid" do
+        let(:category_id) { 'invalid' }
+
+        it 'returns error' do
+          subject
+
+          expect(json['errors']).to include('Category must exist')
+        end
+      end
+
+      context 'when account is from another user' do
+        let!(:another_user) { create(:user) }
+        let!(:another_account) { create(:account, user_id: another_user.id) }
+        let(:account_id) { another_account.id }
+
+        it 'returns error' do
+          subject
+
+          expect(json['errors']).to include('Account must exist')
+        end
+      end
+
+      context 'when category is from another user' do
+        let!(:another_user) { create(:user) }
+        let!(:another_category) { create(:category, user_id: another_user.id) }
+        let(:category_id) { another_category.id }
 
         it 'returns error' do
           subject
