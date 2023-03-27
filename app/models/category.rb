@@ -8,6 +8,8 @@ class Category < ApplicationRecord
 
   belongs_to :user
 
+  has_many :expenses, dependent: :destroy
+
   private
 
   def slugify_name
