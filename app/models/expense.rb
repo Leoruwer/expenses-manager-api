@@ -14,6 +14,15 @@ class Expense < ApplicationRecord
   belongs_to :account
   belongs_to :category
 
+  scope :by_year, ->(year) { where('extract(year from due_at) = ?', year) }
+  scope :by_month, ->(month) { where('extract(month from due_at) = ?', month) }
+  scope :by_due, lambda { |year, month|
+                   where('extract(year from due_at) = ? AND extract(month from due_at) = ?', year, month)
+                 }
+
+  store :account
+  store :category
+
   private
 
   def slugify_name
