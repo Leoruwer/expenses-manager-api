@@ -7,7 +7,7 @@ RSpec.describe Reports::GroupsController, type: :request do
   let!(:another_user) { create(:user) }
 
   let(:jwt_token) { JsonWebToken.encode(user_id: current_user.id) }
-  let(:json) { JSON.parse(response.body).dig('2023', '6', 'expenses') }
+  let(:json) { JSON.parse(response.body)['expenses'] }
 
   let(:current_expense) { create(:expense, user_id: current_user.id, due_at: Date.new(2023, 6, 21)) }
   let(:another_expense) { create(:expense, name: 'Expense', user_id: another_user.id, due_at: Date.new(2023, 6, 28)) }
@@ -45,7 +45,7 @@ RSpec.describe Reports::GroupsController, type: :request do
       it "doesn't return any expense" do
         subject
 
-        expect(json).to be_nil
+        expect(json).to be_empty
       end
     end
   end

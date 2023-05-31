@@ -16,11 +16,7 @@ module Reports
 
     def body
       {
-        params[:year] => {
-          params[:month] => {
-            expenses: expenses
-          }
-        }
+        expenses: expenses
       }.to_json
     end
   end
