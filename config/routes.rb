@@ -5,6 +5,10 @@ Rails.application.routes.draw do
     resources :users, param: :slug, except: :create
   end
 
+  namespace :reports do
+    get 'expenses_by/:year/:month', to: 'groups#show'
+  end
+
   resources :default_bills, param: :slug
   resources :accounts, param: :slug
   resources :categories, param: :slug
