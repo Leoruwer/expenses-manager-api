@@ -16,14 +16,13 @@ RSpec.describe Reports::GroupsController, type: :request do
   before do
     current_expense.reload
     another_expense.reload
-    current_user.reload
   end
 
   describe '#show' do
     context 'when year/month belongs to expense' do
       subject { get(reports_path(2023, 6), headers: { Authorization: jwt_token }) }
 
-      it 'return expenses from user' do
+      it 'returns expenses from user' do
         subject
 
         expect(response).to have_http_status :ok
