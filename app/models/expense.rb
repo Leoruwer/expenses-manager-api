@@ -20,9 +20,6 @@ class Expense < ApplicationRecord
                    where('extract(year from due_at) = ? AND extract(month from due_at) = ?', year, month)
                  }
 
-  store :account
-  store :category
-
   private
 
   def slugify_name

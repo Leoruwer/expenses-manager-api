@@ -5,19 +5,13 @@ module Reports
     before_action :authorize_user
 
     def show
-      render json: body, status: :ok
+      render json: expenses, each_serializer: ::ExpenseSerializer, status: :ok
     end
 
     private
 
     def expenses
       @expenses = current_user.expenses.by_due(params[:year], params[:month])
-    end
-
-    def body
-      {
-        expenses: expenses
-      }.to_json
     end
   end
 end
